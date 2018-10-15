@@ -32,7 +32,6 @@ module.exports = {
                     }
                     next(error)
                 }
-                req.body.result = "Ok dude."
                 next()
             });
         } catch (e) {

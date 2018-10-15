@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 module.exports = {
     filtre(req, res, next) {
         try {
@@ -9,7 +11,14 @@ module.exports = {
                     output.push(trip)
                 }
             }
-            req.body.result = output;
+            var dateNow = moment(Date.now()).format('YYYY-M-DD')
+            var nextTransport = []
+            for (let s of output) {
+                var interval = moment(dateNow + ' ' + s.departure_time).diff(Date.now(), 'minutes')
+                nextTransport.push(interval)
+            }
+            req.body.result = [nextTransport, output];
+
             next()
         } catch (e) {
             error = {
