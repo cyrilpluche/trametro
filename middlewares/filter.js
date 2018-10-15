@@ -17,7 +17,7 @@ module.exports = {
                 var interval = moment(dateNow + ' ' + s.departure_time).diff(Date.now(), 'minutes')
                 nextTransport.push(interval)
             }
-            req.body.result = [nextTransport, output];
+            req.body.result = nextTransport;
 
             next()
         } catch (e) {
