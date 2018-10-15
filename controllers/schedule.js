@@ -3,6 +3,6 @@ var router = express.Router();
 
 module.exports = {
     findOne(req, res) {
-        return res.status(201).send(req.body.file)
+        return res.status(201).send(req.body.result)
     }
 }

@@ -1,15 +1,14 @@
 var download = require('download-file')
 const getCSV = require('get-csv');
 
-var url = "http://data.montpellier3m.fr/sites/default/files/ressources/TAM_MMM_TpsReel.csv"
-
-var options = {
-    directory: "./",
-    filename: "schedules.csv"
-}
-
 module.exports = {
+
     fromURL(req, res, next) {
+        var url = "http://data.montpellier3m.fr/sites/default/files/ressources/TAM_MMM_TpsReel.csv"
+        var options = {
+            directory: "./public/files",
+            filename: "data.csv"
+        }
         /*getCSV(url)
             .then(rows => {
                 req.body.file = rows[1]
@@ -33,7 +32,7 @@ module.exports = {
                     }
                     next(error)
                 }
-                req.body.file = "Ok dude."
+                req.body.result = "Ok dude."
                 next()
             });
         } catch (e) {
