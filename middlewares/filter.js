@@ -7,6 +7,7 @@ module.exports = {
     filtre(req, res, next) {
         try {
             var output = []
+            req.body.brutValues = []
             // Select 3 schedules
             for (let trip of req.body.json) {
                 if (trip['route_short_name'] === req.param('id') &&
@@ -21,6 +22,11 @@ module.exports = {
                 let d1 = moment(moment(Date.now()).tz("Europe/Paris").format('YYYY-M-DD') + ' ' + s.departure_time);
                 let d2 = moment(Date.now()).tz("Europe/Paris")
                 let interval = d1.diff(d2, 'minutes')
+                req.body.brutValues.push({
+                    d1: d1,
+                    d2: d2,
+                    interval: interval
+                })
                 // If we are between midnight, the interval will be negative
                 if (interval < 0 && d1.format('hh') === '00') {
                     let d11 = moment(moment(Date.now()).tz("Europe/Paris").format('YYYY-M-DD') + ' ' + s.departure_time);
