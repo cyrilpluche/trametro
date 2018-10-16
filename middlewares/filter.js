@@ -20,7 +20,7 @@ module.exports = {
             var nextTransport = []
             for (let s of output) {
                 let d1 = moment(moment(Date.now()).tz("Europe/Paris").format('YYYY-M-DD') + ' ' + s.departure_time);
-                let d2 = moment(Date.now()).tz("Europe/Paris")
+                let d2 = moment(Date.now()).tz("Europe/Paris").format('YYYY-M-DDThh:mm:ss' + '.000Z')
                 let interval = d1.diff(d2, 'minutes')
                 req.body.brutValues.push({
                     d1: d1,
@@ -31,7 +31,7 @@ module.exports = {
                 if (interval < 0 && d1.format('hh') === '00') {
                     let d11 = moment(moment(Date.now()).tz("Europe/Paris").format('YYYY-M-DD') + ' ' + s.departure_time);
                     d11.add(1, 'day')
-                    let d22 = moment(Date.now()).tz("Europe/Paris")
+                    let d22 = moment(Date.now()).tz("Europe/Paris").format('YYYY-M-DDThh:mm:ss' + '.000Z')
                     interval = d11.diff(d22, 'minutes')
                 }
                 nextTransport.push(interval)
