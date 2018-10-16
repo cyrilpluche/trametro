@@ -1,4 +1,5 @@
 var moment = require('moment-timezone');
+const helper = require('./helper')
 
 module.exports = {
     /* Take the json file, keep 3 schedules and returns the litteral version of the amount of time before the transport
@@ -9,9 +10,10 @@ module.exports = {
             var output = []
             req.body.brutValues = []
             // Select 3 schedules
+            let stationTAM = helper.stationToTAM(req.param('stop'), req.param('id'))
             for (let trip of req.body.json) {
                 if (trip['route_short_name'] === req.param('id') &&
-                    trip['stop_name'].toLowerCase() === req.param('stop').toLowerCase() &&
+                    trip['stop_name'].toLowerCase() === stationTAM.toLowerCase() &&
                     trip['trip_headsign'].toLowerCase() === req.param('destination').toLowerCase()) {
                     output.push(trip)
                 }
@@ -23,7 +25,6 @@ module.exports = {
                 let min = parseInt(s.departure_time.substring(3, 5))
                 let sec = parseInt(s.departure_time.substring(6, 8))
 
-                let d = moment(moment(Date.now()).tz("Europe/Paris").format('YYYY-M-DD') + ' ' + s.departure_time).tz("Europe/Paris").format('YYYY-M-DDThh:mm:ss');
                 let d1 = moment(Date.now()).set({h: hou, m: min, s: sec}).format('YYYY-M-DDThh:mm:ss')
                 let d2 = moment(Date.now()).tz("Europe/Paris").format('YYYY-M-DDThh:mm:ss')
 
