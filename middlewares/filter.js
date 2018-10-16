@@ -21,19 +21,19 @@ module.exports = {
             for (let s of output) {
                 let d1 = moment(moment(Date.now()).format('YYYY-M-DD') + ' ' + s.departure_time).tz("Europe/Paris").format('YYYY-M-DDThh:mm:ss');
                 let d2 = moment(Date.now()).tz("Europe/Paris").format('YYYY-M-DDThh:mm:ss')
-                req.body.brutValues.push({
-                    h: s.departure_time,
-                    d1: d1,
-                    d2: d2,
-                    interval: interval
-                })
+
                 let interval = moment(d1).diff(moment(d2), 'minutes')
                 // If we are between midnight, the interval will be negative
                 if (interval < 0 && moment(d1).format('hh') === '00') {
                     d1.add(1, 'day')
                     interval = moment(d1).diff(moment(d2), 'minutes')
                 }
-
+                req.body.brutValues.push({
+                    h: s.departure_time,
+                    d1: d1,
+                    d2: d2,
+                    interval: interval
+                })
 
                 nextTransport.push(interval)
             }
