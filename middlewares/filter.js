@@ -19,21 +19,22 @@ module.exports = {
             // Convert the integer for Alexa
             var nextTransport = []
             for (let s of output) {
-                let d1 = moment(moment(Date.now()).tz("Europe/Paris").format('YYYY-M-DD') + ' ' + s.departure_time);
-                let d2 = moment(Date.now()).tz("Europe/Paris").format('YYYY-M-DDThh:mm:ss' + '.000Z')
-                let interval = d1.diff(d2, 'minutes')
-                req.body.brutValues.push({
+                let d1 = moment(moment(Date.now()).format('YYYY-M-DD') + ' ' + s.departure_time).tz("Europe/Paris").format('YYYY-M-DDThh:mm:ss');
+                let d2 = moment(Date.now()).tz("Europe/Paris").format('YYYY-M-DDThh:mm:ss')
+                /*req.body.brutValues.push({
+                    h: s.departure_time,
                     d1: d1,
                     d2: d2,
                     interval: interval
-                })
+                })*/
+                let interval = moment(d1).diff(moment(d2), 'minutes')
                 // If we are between midnight, the interval will be negative
-                if (interval < 0 && d1.format('hh') === '00') {
-                    let d11 = moment(moment(Date.now()).tz("Europe/Paris").format('YYYY-M-DD') + ' ' + s.departure_time);
-                    d11.add(1, 'day')
-                    let d22 = moment(Date.now()).tz("Europe/Paris").format('YYYY-M-DDThh:mm:ss' + '.000Z')
-                    interval = d11.diff(d22, 'minutes')
+                if (interval < 0 && moment(d1).format('hh') === '00') {
+                    d1.add(1, 'day')
+                    interval = moment(d1).diff(moment(d2), 'minutes')
                 }
+
+
                 nextTransport.push(interval)
             }
             req.body.result = nextTransport;
