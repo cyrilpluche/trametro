@@ -19,7 +19,7 @@ module.exports = {
             // Convert the integer for Alexa
             var nextTransport = []
             for (let s of output) {
-                let d1 = moment(moment(Date.now()).format('YYYY-M-DD') + ' ' + s.departure_time).tz("Europe/Paris").format('YYYY-M-DDThh:mm:ss');
+                let d1 = moment(moment(Date.now()).tz("Europe/Paris").format('YYYY-M-DD') + ' ' + s.departure_time).tz("Europe/Paris").format('YYYY-M-DDThh:mm:ss');
                 let d2 = moment(Date.now()).tz("Europe/Paris").format('YYYY-M-DDThh:mm:ss')
 
                 let interval = moment(d1).diff(moment(d2), 'minutes')
