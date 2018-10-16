@@ -9,19 +9,6 @@ module.exports = {
             directory: "./public/files",
             filename: "data.csv"
         }
-        /*getCSV(url)
-            .then(rows => {
-                req.body.file = rows[1]
-                next()
-            })
-            .catch( e => {
-                error = {
-                    type: 'INTERNAL_ERROR',
-                    message: "Error is : " + e,
-                    status: 500
-                }
-                next(error)
-            });*/
         try {
             download(url, options, e => {
                 if (e) {

@@ -27,7 +27,7 @@ module.exports = {
         for (let num of req.body.result) {
             var s = "zéro"
             if (num === 0) s = "proche"
-            else if (num === 1) s = "un"
+            else if (num === 1) s = "une"
             else if (num === 2) s = "deux"
             else if (num === 3) s = "trois"
             else if (num === 4) s = "quatre"
