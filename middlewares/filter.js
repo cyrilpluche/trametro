@@ -1,9 +1,13 @@
-const moment = require('moment');
+var moment = require('moment-timezone');
 
 module.exports = {
+    /* Take the json file, keep 3 schedules and returns the litteral version of the amount of time before the transport
+     * arrive to the given station
+     * */
     filtre(req, res, next) {
         try {
             var output = []
+            // Select 3 schedules
             for (let trip of req.body.json) {
                 if (trip['route_short_name'] === req.param('id') &&
                     trip['stop_name'].toLowerCase() === req.param('stop').toLowerCase() &&
@@ -11,10 +15,19 @@ module.exports = {
                     output.push(trip)
                 }
             }
-            var dateNow = moment(Date.now()).format('YYYY-M-DD')
+            // Convert the integer for Alexa
             var nextTransport = []
             for (let s of output) {
-                var interval = moment(dateNow + ' ' + s.departure_time).diff(Date.now(), 'minutes')
+                let d1 = moment(moment(Date.now()).tz("Europe/Paris").format('YYYY-M-DD') + ' ' + s.departure_time);
+                let d2 = moment(Date.now()).tz("Europe/Paris")
+                let interval = d1.diff(d2, 'minutes')
+                // If we are between midnight, the interval will be negative
+                if (interval < 0 && d1.format('hh') === '00') {
+                    let d11 = moment(moment(Date.now()).tz("Europe/Paris").format('YYYY-M-DD') + ' ' + s.departure_time);
+                    d11.add(1, 'day')
+                    let d22 = moment(Date.now()).tz("Europe/Paris")
+                    interval = d11.diff(d22, 'minutes')
+                }
                 nextTransport.push(interval)
             }
             req.body.result = nextTransport;

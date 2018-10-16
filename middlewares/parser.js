@@ -26,7 +26,8 @@ module.exports = {
         var parsedInt = []
         for (let num of req.body.result) {
             var s = "zéro"
-            if (num === 1) s = "un"
+            if (num === 0) s = "proche"
+            else if (num === 1) s = "un"
             else if (num === 2) s = "deux"
             else if (num === 3) s = "trois"
             else if (num === 4) s = "quatre"
@@ -39,6 +40,13 @@ module.exports = {
             else s = "plus de dix"
             parsedInt.push(s)
         }
+        //Check that intervals are increasing
+        if (parsedInt[0] === "plus de dix") {
+            if (parsedInt[1] !== "plus de dix" || parsedInt[2] !== "plus de dix") parsedInt[0] = parsedInt[1]
+        } else if (parsedInt[1]) {
+            if (parsedInt[2] !== "plus de dix") parsedInt[1] = parsedInt[2]
+        }
+
         req.body.result = parsedInt
         next()
     }
