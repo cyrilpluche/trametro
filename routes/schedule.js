@@ -10,5 +10,7 @@ router.get('/find_from_web', downloadMiddleware.fromURL, scheduleController.find
 
 // http://localhost:3000/api/schedule/find_one?id=1&stop=antigone&destination=odysseum
 router.get('/find_one', downloadMiddleware.fromURL, parseMiddleware.parse, filterMiddleware.filtre, parseMiddleware.intToString, scheduleController.findOne);
+router.get('/find_all', downloadMiddleware.fromURL, parseMiddleware.parse, filterMiddleware.filtre, parseMiddleware.intToString, scheduleController.findAll);
+
 
 module.exports = router;

@@ -3,6 +3,9 @@ module.exports = {
     ligneToTam (ligne) {
         let un = ["une", "un"]
         if (un.includes(ligne)) return "1"
+        else if (ligne === "deux") return "2"
+        else if (ligne === "trois") return "3"
+        else if (ligne === "quatre") return "4"
         else return ligne
     },
 
@@ -13,6 +16,8 @@ module.exports = {
             else if (station === "hopital lapeyronie") return "hop. lapeyronie"
             else if (station === "place de l'europe") return "pl. de l'europe"
             else return station
+        } else if (ligne === "2") {
+
         } else {
             return station
         }

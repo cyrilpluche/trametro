@@ -1,6 +1,5 @@
-const moment = require('moment');
-
 const mw = require('./alexa-middlewares');
+const https = require('https');
 
 'use strict';
 const Alexa = require('alexa-sdk');
@@ -12,38 +11,29 @@ const handlers = {
         this.emit(':ask', 'Bienvenue sur Trametro, quelle ligne vous intéresse ?')
     },
     'ChooseLigneIndent': function () {
-        var isDownloaded = mw.download.fromURL()
+        /* Prepare the URL */
         var params = this.event.request.intent.slots
-        var ligne, direction, station
+        var args = mw.parser.parseLigneIndent(params)
+        var url = "https://trametro.herokuapp.com/api/schedule/find_one?id=" + args.ligne + "&stop=" + args.station + "&destination=" + args.direction
 
-        try {
-            ligne = params.ligneNumber.value
-        } catch (e) {
-            ligne = null
+        /* Get the answer from the API */
+        https.get(url, (resp) => {
+            let data = '';
+            resp.on('data', (chunk) => {
+                data += chunk;
+            });
+            resp.on('end', () => {
+                this.emit(':ask', data + ". 'Désirez-vous une autre information ?'")
+            });
+        })
+    },
+    'NewInformationIndent': function () {
+        var params = this.event.request.intent.slots
+        if (params.decision.value === 'oui') {
+            this.emit(':ask', 'Quelle ligne vous intéresse ?')
+        } else {
+            this.emit(':tell', 'A bientôt mon gars sûr.')
         }
-        try {
-            direction = params.direction.value
-        } catch (e) {
-            direction = null
-        }
-        try {
-            station = params.station.value
-        } catch (e) {
-            station = null
-        }
-
-        try {
-            // var url = "/api/schedule/find_one?id=" + ligne + "&stop=" + station + "&destination=" + station
-            var json = mw.parser.parse()
-            var schedules = mw.filter.filtre(json, ligne.toString(), direction, station)
-
-            this.emit(':tell', 'Le tramway ' + ligne + ' direction ' + direction + 'passe dans ' + schedules[0] + ' à ' + station)
-        } catch (e) {
-
-        }
-
-
-        this.emit(':tell', 'ligne un')
     },
     'AMAZON.HelpIntent': function () {
 
