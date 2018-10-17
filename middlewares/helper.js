@@ -1,5 +1,11 @@
 module.exports = {
 
+    ligneToTam (ligne) {
+        let un = ["une", "un"]
+        if (un.includes(ligne)) return "1"
+        else return ligne
+    },
+
     stationToTAM (station, ligne) {
         if (ligne === "1") {
             if (station === "corum") return "corum t1"
@@ -10,5 +16,11 @@ module.exports = {
         } else {
             return station
         }
+    },
+
+    directionToTAM (direction) {
+        let mosson = ["maussan", "mossan", "mausson"]
+        if (mosson.includes(direction)) return "mosson"
+        else return direction
     }
 }

@@ -10,11 +10,14 @@ module.exports = {
             var output = []
             req.body.brutValues = []
             // Select 3 schedules
-            let stationTAM = helper.stationToTAM(req.param('stop'), req.param('id'))
+            let ligneTAM = helper.ligneToTam(req.param('id'))
+            let stationTAM = helper.stationToTAM(req.param('stop'), ligneTAM)
+            let directionTAM = helper.directionToTAM(req.param('destination'))
+
             for (let trip of req.body.json) {
-                if (trip['route_short_name'] === req.param('id') &&
+                if (trip['route_short_name'] === ligneTAM &&
                     trip['stop_name'].toLowerCase() === stationTAM.toLowerCase() &&
-                    trip['trip_headsign'].toLowerCase() === req.param('destination').toLowerCase()) {
+                    trip['trip_headsign'].toLowerCase() === directionTAM.toLowerCase()) {
                     output.push(trip)
                 }
             }
