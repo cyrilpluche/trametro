@@ -1,0 +1,10 @@
+
+
+Traveler
+--------
+has many          trip                                     as TripTravelerFks 
+
+
+Trip
+----
+belongs to        traveler                                 as Traveler 
