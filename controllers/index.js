@@ -1,7 +1,7 @@
-const users = require('./users');
+const traveler = require('./traveler');
 const schedule = require('./schedule');
 
 module.exports = {
-    users,
+    traveler,
     schedule
 };
