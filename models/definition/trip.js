@@ -34,6 +34,16 @@ module.exports = (sequelize, DataTypes) => {
             field: 'direction_name',
             allowNull: true
         },
+        tripIsFavorite: {
+            type: DataTypes.BOOLEAN,
+            field: 'trip_is_favorite',
+            allowNull: false
+        },
+        sessionId: {
+            type: DataTypes.STRING(250),
+            field: 'session_id',
+            allowNull: false
+        },
         travelerId: {
             type: DataTypes.STRING(500),
             field: 'traveler_id',

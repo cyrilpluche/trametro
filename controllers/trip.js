@@ -10,57 +10,108 @@ module.exports = {
      *      ligneCode = 1, (optional & string)
      *      directionCode = nd de sablassou, (optional)
      *      directionName = notre dame de sablassou, (optional),
+     *      tripIsFavorite = true,
      *      travelerId = alexaid0
      *  }
      *
-     *  return: Traveler object created.
+     *  return: Middleware that create a trip if needed.
      */
-    create(req, res) {
-        return Trip
-            .create(req.body)
-            .then(trip => {
-                res.status(201).send(trip)
-            })
-            .catch(error => res.status(400).send(error));
+    create(req, res, next) {
+        // The trip already exist
+        if (req.body.trip) next()
+        else {
+            // We need to create this new trip
+            Trip
+                .create({
+                    travelerId: req.param('id'),
+                    sessionId: req.param('session'),
+                    tripIsFavorite: req.param('isfav')
+                })
+                .then(trip => {
+                    req.body.trip = trip
+                    next()
+                })
+                .catch(error => res.status(400).send(error));
+        }
     },
 
-    /*  localhost:3000/api/traveler/find_one/:id
+    /*  localhost:3000/api/traveler/find_one?id=alexaid&session=sessionid&isfav=true
      *
-     *  return: Traveler object if founded.
+     *  return: Middleware that search for the trip or create it.
      */
-    findOne(req, res) {
-        return Trip
-            .findOne({
-                where: {
-                    travelerId : req.params.id
-                }
-            })
-            .then(trip => {
-                res.status(201).send(trip)
-            })
-            .catch(error => res.status(400).send(error));
+    findOne(req, res, next) {
+        if (req.param('isfav') === 'false') {
+            return Trip
+                .findOne({
+                    // We are searching for a random trip
+                    where: {
+                        travelerId: req.param('id'),
+                        sessionId: req.param('session'),
+                        tripIsFavorite: req.param('isfav')
+                    }
+                })
+                .then(trip => {
+                    req.body.trip = trip
+                    next()
+                })
+                .catch(error => res.status(400).send(error));
+        } else {
+            // We are searching for a fav trip
+            return Trip
+                .findOne({
+                    where: {
+                        travelerId: req.param('id'),
+                        tripIsFavorite: req.param('isfav')
+                    }
+                })
+                .then(trip => {
+                    req.body.trip = trip
+                    next()
+                })
+                .catch(error => res.status(400).send(error));
+        }
     },
 
-    /*  localhost:4200/api/traveler/update/id
+    /*  localhost:4200/api/traveler/update?id=alexaid&session=id&isfav=true
      *
      *  req.body = {
-     *      stationCode = pl de l'europe, (optional)
-     *      stationName = place de l'europe, (optional)
-     *      ligneCode = 1, (optional & string)
-     *      directionCode = nd de sablassou, (optional)
-     *      directionName = notre dame de sablassou, (optional),
+     *      stationCode: pl de l'europe, (optional)
+     *      stationName: place de l'europe, (optional)
+     *      ligneCode: 1, (optional & string)
+     *      directionCode: nd de sablassou, (optional)
+     *      directionName: notre dame de sablassou, (optional),
+     *      tripIsFavorite: false,
+     *      sessionid: id
      *  }
      *
      *  return: true if the update is done, else false.
      */
     update(req, res, next) {
-        return Trip
-            .update(req.body, {
-                where: { travelerId: req.params.id }
-            })
-            .then(isUpdated => {
-                res.status(201).send(isUpdated[0] === 1)
-            })
-            .catch(error => res.status(400).send(error));
+        if (req.param('isfav') === 'false') {
+            return Trip
+                .update(req.body, {
+                    where: {
+                        travelerId: req.body.trip.travelerId,
+                        sessionId: req.body.trip.sessionId,
+                        tripIsFavorite: req.body.trip.tripIsFavorite
+                    }
+                })
+                .then(isUpdated => {
+                    res.status(201).send(isUpdated[0] === 1)
+                })
+                .catch(error => res.status(400).send(error));
+        } else {
+            return Trip
+                .update(req.body, {
+                    where: {
+                        travelerId: req.body.trip.travelerId,
+                        tripIsFavorite: req.body.trip.tripIsFavorite
+                    }
+                })
+                .then(isUpdated => {
+                    res.status(201).send(isUpdated[0] === 1)
+                })
+                .catch(error => res.status(400).send(error));
+        }
     }
 }
