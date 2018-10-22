@@ -129,7 +129,7 @@ module.exports = {
                 let body = {
                     tripIsFavorite: true,
                     stationCode: trip.dataValues.stationCode,
-                    ligneCode: trip.dataValues.ligne_code,
+                    ligneCode: trip.dataValues.ligneCode,
                     directionCode: trip.dataValues.directionCode
                 }
 
