@@ -1,6 +1,6 @@
 module.exports = {
     findOne(req, res) {
-        let answer
+
         if (req.body.result[0] === "proche") {
             answer = 'Le tramway ligne ' + req.body.ligneTAM + ', direction ' + req.body.directionTAM + ', est ' + req.body.result[0] + ' de ' + req.body.stationTAM
         } else {
