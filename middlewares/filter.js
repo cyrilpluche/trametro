@@ -11,7 +11,7 @@ module.exports = {
             req.body.brutValues = []
             let ligneTAM, stationTAM, directionTAM
             // Select 3 schedules
-            if (req.body.trip) {
+            if (req.param('isFromDb') === 'true') {
                 req.body.ligneTAM = helper.ligneToTam(req.body.trip.ligneCode)
                 req.body.stationTAM = helper.stationToTAM(req.body.trip.stationCode)
                 req.body.directionTAM = helper.directionToTAM(req.body.trip.directionCode)
