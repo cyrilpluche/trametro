@@ -25,6 +25,8 @@ module.exports = {
      *  return: Traveler object if founded.
      */
     findOne(req, res) {
+        console.log('HERE : ' + req.param('id'))
+        console.log('HERE : ' + req.param('status'))
         return Traveler
             .findOne({
                 where: {
