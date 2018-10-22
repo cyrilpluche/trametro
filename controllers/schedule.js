@@ -2,9 +2,9 @@ module.exports = {
     findOne(req, res) {
         let answer
         if (req.body.result[0] === "proche") {
-            answer = 'Le tramway ligne ' + req.param('id') + ', direction ' + req.param('destination') + ', est ' + req.body.result[0] + ' de ' + req.param('stop')
+            answer = 'Le tramway ligne ' + req.body.ligneTAM + ', direction ' + req.body.directionTAM + ', est ' + req.body.result[0] + ' de ' + req.body.stationTAM
         } else {
-            answer = 'Le tramway ligne ' + req.param('id') + ', direction ' + req.param('destination') + ', arrive dans ' + req.body.result[0] + ' minutes à ' + req.param('stop')
+            answer = 'Le tramway ligne ' + req.body.ligneTAM + ', direction ' + req.body.directionTAM + ', arrive dans ' + req.body.result[0] + ' minutes à ' + req.body.stationTAM
         }
         return res.status(201).json(answer)
     },

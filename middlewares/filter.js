@@ -12,13 +12,13 @@ module.exports = {
             let ligneTAM, stationTAM, directionTAM
             // Select 3 schedules
             if (req.body.trip) {
-                ligneTAM = helper.ligneToTam(req.body.trip.ligneCode)
-                stationTAM = helper.stationToTAM(req.body.trip.stationCode)
-                directionTAM = helper.directionToTAM(req.body.trip.directionCode)
+                req.body.ligneTAM = helper.ligneToTam(req.body.trip.ligneCode)
+                req.body.stationTAM = helper.stationToTAM(req.body.trip.stationCode)
+                req.body.directionTAM = helper.directionToTAM(req.body.trip.directionCode)
             } else {
-                ligneTAM = helper.ligneToTam(req.param('id'))
-                stationTAM = helper.stationToTAM(req.param('stop'), ligneTAM)
-                directionTAM = helper.directionToTAM(req.param('destination'))
+                req.body.ligneTAM = helper.ligneToTam(req.param('id'))
+                req.body.stationTAM = helper.stationToTAM(req.param('stop'), ligneTAM)
+                req.body.directionTAM = helper.directionToTAM(req.param('destination'))
             }
 
             for (let trip of req.body.json) {
