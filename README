@@ -1,1 +1,6 @@
 ask deploy --force --target 'lambda'
+
+status 0 = No fav && ask => Trip ?
+status 1 = No fav && No ask => Want fav ?
+status 2 = Fav && ask => Trip ?
+status 3 = Fav && No ask => Want fav ?

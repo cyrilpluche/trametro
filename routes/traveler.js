@@ -6,4 +6,5 @@ router.get('/find_one', travelerController.findOne)
 router.post('/create', travelerController.create);
 router.post('/update/:id', travelerController.update);
 
+
 module.exports = router;
