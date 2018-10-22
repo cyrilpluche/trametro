@@ -32,7 +32,7 @@ module.exports = {
                 }
             })
             .then(traveler => {
-                if (traveler) res.status(201).send(traveler)
+                if (traveler) res.status(201).send('Bonjour ' + traveler.dataValues.travelerName + '. Bienvenue sur Trametro. Quelle ligne vous intéresse ?')
                 else {
                     req.body.travelerId = req.params.id
                     Traveler
