@@ -12,7 +12,7 @@ module.exports = {
             let ligneTAM, stationTAM, directionTAM
             // Select 3 schedules
             if (req.param('isFromDb') === 'true') {
-                req.body.ligneTAM = helper.ligneToTam(req.body.trip.dataValues.ligneCode)
+                req.body.ligneTAM = helper.ligneToTam(req.body.trip.ligneCode)
                 req.body.stationTAM = helper.stationToTAM(req.body.trip.stationCode)
                 req.body.directionTAM = helper.directionToTAM(req.body.trip.directionCode)
             } else {
