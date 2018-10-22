@@ -36,9 +36,12 @@ module.exports = {
                 else {
                     req.body.travelerId = req.params.id
                     Traveler
-                        .create(req.body)
+                        .create({
+                            travelerId: req.params.id,
+                            travelerName: ""
+                        })
                         .then(traveler => {
-                            res.status(201).send(traveler)
+                            res.status(201).send('Bonjour ' + traveler.travelerName + '. Bienvenue sur Trametro. Quelle ligne vous intéresse ?')
                         })
                         .catch(error => res.status(400).send(error));
                 }
