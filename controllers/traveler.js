@@ -36,7 +36,6 @@ module.exports = {
             .then(traveler => {
                 if (traveler) res.status(201).send(traveler)
                 else {
-                    req.body.travelerId = req.param('id')
                     Traveler
                         .create({
                             travelerId: req.param('id'),

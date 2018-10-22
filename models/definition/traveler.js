@@ -12,6 +12,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(250),
             field: 'traveler_name',
             allowNull: true
+        },
+        travelerStatus: {
+            type: DataTypes.STRING(250),
+            field: 'traveler_status',
+            allowNull: false
         }
     }, {
         schema: 'public',
