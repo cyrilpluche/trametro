@@ -113,5 +113,30 @@ module.exports = {
                 })
                 .catch(error => res.status(400).send(error));
         }
-    }
+    },
+
+    findAndReplaceFav(req, res, next) {
+        Trip
+            .findOne({
+                // We are searching for the trip of the session
+                where: {
+                    travelerId: req.param('id'),
+                    sessionId: req.param('session'),
+                    tripIsFavorite: false
+                }
+            })
+            .then(trip => {
+                trip.dataValues.tripIsFavorite = true
+                return Trip
+                    .update(trip.dataValues, {
+                        where: {
+                            travelerId: req.body.trip.travelerId,
+                            tripIsFavorite: req.body.trip.tripIsFavorite
+                        }
+                    })
+                    .then(isUpdated => res.status(201).send(isUpdated[0] === 1))
+                    .catch(error => res.status(400).send(error));
+            })
+            .catch(error => res.status(400).send(error));
+    },
 }

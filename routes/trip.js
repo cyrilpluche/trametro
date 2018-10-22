@@ -8,5 +8,6 @@ router.get('/find_one', tripController.findOne)
 // localhost:3000/api/trip/find_one?id=alexaid&session=sessionid&isfav=true
 // find the favorite/not favorite trip. Then create it if needed. Then update it.
 router.post('/update', tripController.findOne, tripController.create, tripController.update);
+router.post('/store_new_favorite_trip', tripController.findAndReplaceFav);
 
 module.exports = router;
