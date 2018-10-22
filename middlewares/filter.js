@@ -9,7 +9,6 @@ module.exports = {
         try {
             var output = []
             req.body.brutValues = []
-            let ligneTAM, stationTAM, directionTAM
             // Select 3 schedules
             if (req.param('isFromDb') === 'true') {
                 req.body.ligneTAM = helper.ligneToTam(req.body.trip.ligneCode)
@@ -22,9 +21,9 @@ module.exports = {
             }
 
             for (let trip of req.body.json) {
-                if (trip['route_short_name'] === ligneTAM &&
-                    trip['stop_name'].toLowerCase() === stationTAM.toLowerCase() &&
-                    trip['trip_headsign'].toLowerCase() === directionTAM.toLowerCase()) {
+                if (trip['route_short_name'] === req.body.ligneTAM &&
+                    trip['stop_name'].toLowerCase() === req.body.stationTAM.toLowerCase() &&
+                    trip['trip_headsign'].toLowerCase() === req.body.directionTAM.toLowerCase()) {
                     output.push(trip)
                 }
             }
