@@ -20,7 +20,7 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
-    /*  localhost:3000/api/traveler/find_one/:id
+    /*  localhost:3000/api/traveler/find_one?id=id&status=status
      *
      *  return: Traveler object if founded.
      */
@@ -28,16 +28,17 @@ module.exports = {
         return Traveler
             .findOne({
                 where: {
-                    travelerId : req.params.id
+                    travelerId : req.param('id'),
                 }
             })
             .then(traveler => {
                 if (traveler) res.status(201).send(traveler)
                 else {
-                    req.body.travelerId = req.params.id
+                    req.body.travelerId = req.param('id')
                     Traveler
                         .create({
-                            travelerId: req.params.id,
+                            travelerId: req.param('id'),
+                            travelerStatus: req.param('status'),
                             travelerName: ""
                         })
                         .then(traveler => {

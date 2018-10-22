@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS public.Traveler CASCADE;
 CREATE TABLE public.Traveler(
 	traveler_id     VARCHAR (500) NOT NULL ,
 	traveler_name   VARCHAR (250)   ,
+	traveler_status   INT NOT NULL   ,
 	CONSTRAINT Traveler_PK PRIMARY KEY (traveler_id)
 )WITHOUT OIDS;
 
