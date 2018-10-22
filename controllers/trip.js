@@ -140,7 +140,12 @@ module.exports = {
                             tripIsFavorite: true
                         }
                     })
-                    .then(isUpdated => res.status(201).send(isUpdated[0] === 1))
+                    .then(isUpdated => {
+                        if (isUpdated[0] === 0) {
+
+                        }
+                        res.status(201).send(isUpdated[0] === 1)
+                    })
                     .catch(error => res.status(400).send(error));
             })
             .catch(error => res.status(400).send(error));
