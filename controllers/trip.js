@@ -127,6 +127,8 @@ module.exports = {
             })
             .then(trip => {
                 let body = {
+                    travelerId: req.param('id'),
+                    sessionId: req.param('session'),
                     tripIsFavorite: true,
                     stationCode: trip.dataValues.stationCode,
                     ligneCode: trip.dataValues.ligneCode,
@@ -142,9 +144,14 @@ module.exports = {
                     })
                     .then(isUpdated => {
                         if (isUpdated[0] === 0) {
-
+                            Trip
+                                .create(body)
+                                .then(newTrip => {
+                                    res.status(201).send(true)
+                                })
+                                .catch(error => res.status(400).send(error));
                         }
-                        res.status(201).send(isUpdated[0] === 1)
+                        else res.status(201).send(isUpdated[0] === 1)
                     })
                     .catch(error => res.status(400).send(error));
             })
