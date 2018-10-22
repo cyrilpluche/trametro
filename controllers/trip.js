@@ -126,12 +126,18 @@ module.exports = {
                 }
             })
             .then(trip => {
-                trip.dataValues.tripIsFavorite = true
+                let body = {
+                    tripIsFavorite: true,
+                    stationCode: trip.dataValues.stationCode,
+                    ligne_code: trip.dataValues.ligne_code,
+                    directionCode: trip.dataValues.directionCode
+                }
+
                 return Trip
-                    .update(trip.dataValues, {
+                    .update(body, {
                         where: {
-                            travelerId: req.body.trip.travelerId,
-                            tripIsFavorite: req.body.trip.tripIsFavorite
+                            travelerId: req.param('id'),
+                            tripIsFavorite: true
                         }
                     })
                     .then(isUpdated => res.status(201).send(isUpdated[0] === 1))
