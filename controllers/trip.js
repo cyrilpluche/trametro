@@ -35,11 +35,46 @@ module.exports = {
         }
     },
 
-    /*  localhost:3000/api/traveler/find_one?id=alexaid&session=sessionid&isfav=true
-     *
+    /*
      *  return: Middleware that search for the trip or create it.
      */
     findOne(req, res, next) {
+        if (req.param('isfav') === 'false') {
+            return Trip
+                .findOne({
+                    // We are searching for a random trip
+                    where: {
+                        travelerId: req.param('id'),
+                        sessionId: req.param('session'),
+                        tripIsFavorite: req.param('isfav')
+                    }
+                })
+                .then(trip => {
+                    req.body.trip = trip
+                    next()
+                })
+                .catch(error => res.status(400).send(error));
+        } else {
+            // We are searching for a fav trip
+            return Trip
+                .findOne({
+                    where: {
+                        travelerId: req.param('id'),
+                        tripIsFavorite: req.param('isfav')
+                    }
+                })
+                .then(trip => {
+                    req.body.trip = trip
+                    next()
+                })
+                .catch(error => res.status(400).send(error));
+        }
+    },
+
+    /*
+     *  return: Middleware that search for the trip or create it.
+     */
+    findOneMW(req, res, next) {
         if (req.param('isfav') === 'false') {
             return Trip
                 .findOne({
@@ -115,6 +150,10 @@ module.exports = {
         }
     },
 
+    /*  localhost:4200/api/traveler/store_new_favorite_trip?id=alexaid&session=id
+     *
+     *  return: take the last trip and save it as favorite in the database.
+     */
     findAndReplaceFav(req, res, next) {
         Trip
             .findOne({

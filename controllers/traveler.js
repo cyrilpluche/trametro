@@ -94,13 +94,13 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
-    /*  localhost:4200/api/traveler/update/id
+    /*  localhost:4200/api/traveler/update?id=id&etc...
      *
      *  return: Middleware that set travelerStatus to 1.
      */
     initStatus(req, res, next) {
         return Traveler
-            .update({ travelerStatus: '1' }, {
+            .update({ travelerStatus: req.param('status') }, {
                 where: { travelerId: req.param('id') }
             })
             .then(isUpdated => {
