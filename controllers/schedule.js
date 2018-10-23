@@ -7,9 +7,11 @@ module.exports = {
             answer = 'Le tramway ligne ' + req.body.ligneTAM + ', direction ' + req.body.directionTAM + ', arrive dans ' + req.body.result[0] + ' minutes à ' + req.body.stationTAM
         }
         if (answer.includes("undefined")) {
-            answer = "Horaires indisponibles pour le moment."
+            return res.status(201).send(req.body[0])
+        } else {
+            return res.status(201).send(answer)
         }
-        return res.status(201).send(answer)
+
     },
 
     findAll(req, res) {
