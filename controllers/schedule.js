@@ -6,7 +6,8 @@ module.exports = {
         } else {
             answer = 'Le tramway ligne ' + req.body.ligneTAM + ', direction ' + req.body.directionTAM + ', arrive dans ' + req.body.result[0] + ' minutes à ' + req.body.stationTAM
         }
-        if (answer.includes("undefined")) answer = "Horaires indisponibles pour le moment."
+        //if (answer.includes("undefined")) answer = "Horaires indisponibles pour le moment."
+        if (answer.includes("undefined")) res.status(201).send("Horaires indisponibles pour le moment.", answer, req.body.result)
         return res.status(201).send(answer)
     },
 
