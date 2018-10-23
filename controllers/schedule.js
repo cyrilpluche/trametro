@@ -6,8 +6,9 @@ module.exports = {
         } else {
             answer = 'Le tramway ligne ' + req.body.ligneTAM + ', direction ' + req.body.directionTAM + ', arrive dans ' + req.body.result[0] + ' minutes à ' + req.body.stationTAM
         }
-        //if (answer.includes("undefined")) answer = "Horaires indisponibles pour le moment."
-        if (answer.includes("undefined")) res.status(201).send("Horaires indisponibles pour le moment.", answer, req.body.result)
+        if (answer.includes("undefined")) {
+            answer = "Horaires indisponibles pour le moment."
+        }
         return res.status(201).send(answer)
     },
 
@@ -22,8 +23,9 @@ module.exports = {
         } else {
             answer = 'Les prochains tramway arrivent dans ' + req.body.result[0] + ', ' + req.body.result[1] + ' et ' + req.body.result[2] + ' minutes à ' + req.param('stop')
         }
-
-        if (answer.includes("undefined")) res.status(201).send("Horaires indisponibles pour le moment.", answer, req.body.result)
+        if (answer.includes("undefined")) {
+            answer = "Horaires indisponibles pour le moment."
+        }
         return res.status(201).send(answer)
     }
 }
