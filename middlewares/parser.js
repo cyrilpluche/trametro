@@ -4,7 +4,7 @@ module.exports = {
     parse(req, res, next) {
         csv( ({
             delimiter: ';',
-            ignoreColumns: /(course|stop_code|stop_id|is_theorical|dest_ar_code|direction_id)/
+            ignoreColumns: /(course|stop_code|stop_id|is_theorical|dest_ar_code)/
         }) )
             .fromFile("./public/files/data.csv")
             .then((jsonObj)=>{
@@ -25,7 +25,7 @@ module.exports = {
     intToString (req, res, next) {
         var parsedInt = []
         for (let num of req.body.result) {
-            var s = "zéro"
+            var s
             if (num === 0) s = "proche"
             else if (num === 1) s = "une"
             else if (num === 2) s = "deux"
@@ -39,12 +39,6 @@ module.exports = {
             else if (num === 10) s = "dix"
             else s = "plus de dix"
             parsedInt.push(s)
-        }
-        //Check that intervals are increasing
-        if (parsedInt[0] === "plus de dix") {
-            if (parsedInt[1] !== "plus de dix" || parsedInt[2] !== "plus de dix") parsedInt[0] = parsedInt[1]
-        } else if (parsedInt[1]) {
-            if (parsedInt[2] !== "plus de dix") parsedInt[1] = parsedInt[2]
         }
 
         req.body.result = parsedInt

@@ -36,7 +36,9 @@ module.exports = {
         } else if (ligne === "4") {
 
             if (station === "gare st-roch") return "gare st-roch t3"
-            if (station === "place albert 1er") return "albert 1er"
+            else if (station === "place albert 1er") return "albert 1er"
+            else if (station === "corum") return "corum t1"
+
             else return station
 
         } else {

@@ -1,31 +1,61 @@
 module.exports = {
     findOne(req, res) {
-        let answer
-        if (req.body.result[0] === "proche") {
-            answer = 'Le tramway ligne ' + req.body.ligneTAM + ', direction ' + req.body.directionTAM + ', est ' + req.body.result[0] + ' de ' + req.body.stationTAM
-        } else {
-            answer = 'Le tramway ligne ' + req.body.ligneTAM + ', direction ' + req.body.directionTAM + ', arrive dans ' + req.body.result[0] + ' minutes à ' + req.body.stationTAM
+        var answer = 'Le tramway ligne ' + req.body.ligneTAM + ', '
+
+        if (req.body.directionTAM !== "sens a" && req.body.directionTAM !== "sens b") {
+            answer += 'direction '
         }
+
+        answer += req.body.directionTAM
+
+        if (req.body.result[0] === "proche") {
+            answer += ', est ' + req.body.result[0] + ' de '
+        } else {
+            answer += ', arrive dans ' + req.body.result[0] + ' minutes à '
+        }
+
+        answer += req.body.stationTAM
+
         if (answer.includes("undefined")) {
             answer = "Horaires indisponibles pour le moment."
         }
+
         return res.status(201).send(answer)
     },
 
     findAll(req, res) {
-        let answer
-        if (req.body.result[0] === "proche") {
-            if (req.body.result[1] !== "proche") {
-                answer = 'Le prochain tramway , est ' + req.body.result[0] + '. Les suivants arrivent dans ' + req.body.result[1] + ' et ' + req.body.result[2] + ' minutes à ' + req.param('stop')
-            } else {
-                answer = 'Les deux prochains tramway , sont ' + req.body.result[0] + '. Le suivant arrive dans ' + req.body.result[2] + ' minutes à ' + req.param('stop')
-            }
+        let answer = ""
+        let answer1 = ""
+        let answer2 = ""
+
+        if (req.body.result[0] !== undefined) {
+            if (req.body.result[0] === "proche") answer = "Le prochain tramway est " + req.body.result[0] + "."
+            else answer = "Le prochains tramway est dans " + req.body.result[0] + " minutes."
         } else {
-            answer = 'Les prochains tramway arrivent dans ' + req.body.result[0] + ', ' + req.body.result[1] + ' et ' + req.body.result[2] + ' minutes à ' + req.param('stop')
-        }
-        if (answer.includes("undefined")) {
             answer = "Horaires indisponibles pour le moment."
         }
+
+        if (req.body.result[1] !== undefined) {
+            if (req.body.result[1] === "proche") answer = "Les deux prochains tramway sont " + req.body.result[0] + "."
+            else if (req.body.result[0] === "proche") answer1 = " Le suivant est dans " + req.body.result[1] + " minutes."
+            else if (req.body.result[0] === "plus de dix") answer = "Les deux prochains tramway sont dans " + req.body.result[0] + " minutes."
+            else answer = "Les prochains tramways arrivent dans " + req.body.result[0] + " et " + req.body.result[1] + " minutes."
+        }
+
+        if (req.body.result[2] !== undefined) {
+            if (req.body.result[2] === "proche") answer = " Les trois prochains tramway , sont " + req.body.result[0] + "."
+            else if (req.body.result[1] === "proche") answer2 = " Le troisième arrive dans " + req.body.result[2] + " minutes."
+            else if (req.body.result[0] === "proche" && req.body.result[1] === "plus de dix") {
+                answer1 = " Les deux suivants sont dans " + req.body.result[2] + " minutes."
+            }
+            else if (req.body.result[0] === "proche") answer1 = "Les deux suivants sont dans " + req.body.result[1] + " et " + req.body.result[2] + " minutes."
+            else if (req.body.result[0] !== "plus de dix") {
+                answer = "Les trois prochains tramways arrivent dans " + req.body.result[0] + ", " + req.body.result[1] + " et " + req.body.result[2] + " minutes."
+            }
+        }
+
+        answer += answer1 + answer2
+
         return res.status(201).send(answer)
     }
 }

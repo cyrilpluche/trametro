@@ -19,14 +19,27 @@ module.exports = {
                 req.body.stationTAM = helper.stationToTAM(req.param('stop'), req.body.ligneTAM)
                 req.body.directionTAM = helper.directionToTAM(req.param('destination'))
             }
+            if (req.body.directionTAM === "sens a") {
+                req.body.sensTAM = '0'
+            }
+            else if (req.body.directionTAM === "sens b") {
+                req.body.sensTAM = '1'
+            }
 
             for (let trip of req.body.json) {
                 if (trip['route_short_name'] === req.body.ligneTAM &&
-                    trip['stop_name'].toLowerCase() === req.body.stationTAM.toLowerCase() &&
-                    trip['trip_headsign'].toLowerCase() === req.body.directionTAM.toLowerCase()) {
-                    output.push(trip)
+                    trip['stop_name'].toLowerCase() === req.body.stationTAM.toLowerCase()) {
+                    if (req.body.ligneTAM === '4') {
+                        if (trip['direction_id'] === req.body.sensTAM) {
+
+                            output.push(trip)
+                        }
+                    } else if (trip['trip_headsign'].toLowerCase() === req.body.directionTAM.toLowerCase()) {
+                        output.push(trip)
+                    }
                 }
             }
+
             // Convert the integer for Alexa
             var nextTransport = []
             for (let s of output) {
@@ -53,7 +66,6 @@ module.exports = {
                 nextTransport.push(interval)
             }
             req.body.result = nextTransport;
-
             next()
         } catch (e) {
             error = {
