@@ -49,6 +49,9 @@ module.exports = {
                 answer1 = " Les deux suivants sont dans " + req.body.result[2] + " minutes."
             }
             else if (req.body.result[0] === "proche") answer1 = "Les deux suivants sont dans " + req.body.result[1] + " et " + req.body.result[2] + " minutes."
+            else if (req.body.result[0] !== "plus de dix" && req.body.result[1] === "plus de dix") {
+                answer = "Le prochain tramway arrive dans " + req.body.result[1] + " minutes. Les deux prochains sont dans " + req.body.result[2] + " minutes."
+            }
             else if (req.body.result[0] !== "plus de dix") {
                 answer = "Les trois prochains tramways arrivent dans " + req.body.result[0] + ", " + req.body.result[1] + " et " + req.body.result[2] + " minutes."
             }
