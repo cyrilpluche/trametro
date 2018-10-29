@@ -87,6 +87,7 @@ module.exports = {
     },
 
     returnThreeSchedule(req, res, next) {
+        console.log(req.body.answer)
         try {
             var sentence = '';
 
@@ -101,7 +102,7 @@ module.exports = {
                 }
 
             }
-            else if (req.body.answer === 2) {
+            else if (req.body.answer.length === 2) {
 
                 let t1 = req.body.answer[0];
                 let t2 = req.body.answer[1];
@@ -116,7 +117,7 @@ module.exports = {
                 }
 
             }
-            else if (req.body.answer === 3) {
+            else if (req.body.answer.length === 3) {
                 let t1 = req.body.answer[0];
                 let t2 = req.body.answer[1];
                 let t3 = req.body.answer[2];
