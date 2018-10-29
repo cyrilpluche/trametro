@@ -2,23 +2,7 @@ var Traveler = require('../config/db_connection').Traveler;
 var sequelize = require('../config/db_connection').sequelize;
 
 module.exports = {
-    /*  localhost:3000/api/traveler/create
-     *
-     *  req.body = {
-     *      travelerId = id,
-     *      travelerName = lastname (optional)
-     *  }
-     *
-     *  return: Traveler object created.
-     */
-    create(req, res) {
-        return Traveler
-            .create(req.body)
-            .then(traveler => {
-                res.status(201).send(traveler)
-            })
-            .catch(error => res.status(400).send(error));
-    },
+
 
     /*  localhost:3000/api/traveler/find_one?id=id&status=status
      *
@@ -75,24 +59,7 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
-    /*  localhost:4200/api/traveler/update/id
-     *
-     *  req.body = {
-     *      travelerName = Cyril
-     *  }
-     *
-     *  return: true if the update is done, else false.
-     */
-    update(req, res, next) {
-        return Traveler
-            .update(req.body, {
-                where: { travelerId: req.params.id }
-            })
-            .then(isUpdated => {
-                res.status(201).send(isUpdated[0] === 1)
-            })
-            .catch(error => res.status(400).send(error));
-    },
+
 
     /*  localhost:4200/api/traveler/update?id=id&etc...
      *
@@ -114,6 +81,100 @@ module.exports = {
                 }
                 next(error);
             })
-    }
+    },
 
+    /* ============== NEW VERSION ============== */
+    /* ============== NEW VERSION ============== */
+
+    /*
+     * Return: Find the traveler with the given id.
+     */
+    get(req, res, next) {
+        return Traveler
+            .findOne({
+                where:  {travelerId: req.query.travelerId}
+            })
+            .then(traveler => {
+                req.body.answer = traveler;
+                next();
+            })
+            .catch (err => {
+                res.send(400, 'Traveler:get / ' + err.message);
+            })
+    },
+
+    /*
+     *  req.body = {
+     *      travelerId: String,
+     *      travelerStatus: String,
+     *      travelerName: String (optional)
+     *  }
+     *
+     *  return: create a new Traveler.
+     */
+    create(req, res, next) {
+        if (req.body.answer) {
+            // User already exist
+            next()
+        } else {
+            // User is new
+            return Traveler
+                .create({
+                    travelerId: req.query.travelerId,
+                    travelerStatus: 0
+                })
+                .then(traveler => {
+                    req.body.answer = traveler
+                    next()
+                })
+                .catch(err => res.send(400, 'Traveler:create / ' + err.message));
+        }
+    },
+
+    /*
+     *  req.body = {
+     *      tripFavorite = String
+     *  }
+     *
+     *  return: true if the update is done, else false.
+     */
+    update(req, res, next) {
+        try {
+            if (req.body.answer.dataValues.isTripFinished) {
+                return Traveler
+                    .update({ tripFavorite: req.body.answer.dataValues.tripId }, {
+                        where: { travelerId: req.query.travelerId }
+                    })
+                    .then(isUpdated => {
+                        if (isUpdated[0] === 1) {
+                            req.body.answer = "C'est fait. Vous pouvez maintenant me le demander n'importe quand."
+                            next()
+                        }
+                        else res.send(400, 'Traveler:update / Trip had not been add to favorite.')
+                    })
+                    .catch(err => res.send(400, 'Traveler:update / ' + err.message));
+            } else {
+                res.send(400, 'Traveler:update / No finished session found.')
+            }
+        } catch (err) {
+            res.send(400, 'Traveler:update / No session trip found.')
+        }
+
+    },
+
+    /*
+     * Return: Find the traveler with the given id.
+     */
+    bodyToQuery(req, res, next) {
+        if (req.body.answer) {
+            if (req.body.answer.dataValues.tripFavorite) {
+                req.query.tripId = req.body.answer.dataValues.tripFavorite
+                next()
+            } else {
+                res.send(400, 'Traveler:bodyToQuery / No trip favorite yet.')
+            }
+        } else {
+            res.send(400, 'Traveler:bodyToQuery / No user found.')
+        }
+    }
 }

@@ -4,3 +4,13 @@ status 0 = No fav && ask => Trip ?
 status 1 = No fav && No ask => Want fav ?
 status 2 = Fav && ask => Trip ?
 status 3 = Fav && No ask => Want fav ?
+
+
+4. Generate sequelize models, run these commands :
+
+(Only on the first time)
+    npm install -g pg-generator
+    pgen template sequelize -t sequelize-template
+
+(Every time you change database structure)
+    pgen exec sequelize-template -d trametro -u postgres -p postgres -t models

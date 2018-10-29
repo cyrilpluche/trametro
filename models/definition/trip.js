@@ -34,9 +34,9 @@ module.exports = (sequelize, DataTypes) => {
             field: 'direction_name',
             allowNull: true
         },
-        tripIsFavorite: {
+        isTripFinished: {
             type: DataTypes.BOOLEAN,
-            field: 'trip_is_favorite',
+            field: 'is_trip_finished',
             allowNull: false
         },
         sessionId: {

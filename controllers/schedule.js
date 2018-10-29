@@ -60,5 +60,89 @@ module.exports = {
         answer += answer1 + answer2
 
         return res.status(201).send(answer)
-    }
+    },
+
+    /* ======== NEW VERSION ========= */
+    returnOneSchedule(req, res, next) {
+        try {
+            console.log(req.body.answer)
+            if (req.body.answer[0]) {
+                var sentence = 'Le tramway '
+
+                // We choose between two format of sentence
+                if (req.body.answer[0] < 2) {
+                    sentence += 'est proche.'
+                } else {
+                    sentence += 'arrive dans ' + req.body.answer[0] + ' minutes.'
+                }
+
+                req.body.answer = sentence;
+            } else {
+                req.body.answer = 'Ce tramway est actuellement indisponible.'
+            }
+            next()
+        } catch (err) {
+            res.send(400, 'Schedule:returnOneSchedule / ' + err.message)
+        }
+    },
+
+    returnThreeSchedule(req, res, next) {
+        try {
+            var sentence = '';
+
+            if (req.body.answer.length === 1) {
+
+                let t1 = req.body.answer[0];
+                sentence += 'le tramway ';
+                if (t1 < 2) {
+                    sentence += 'est proche.'
+                } else {
+                    sentence += 'arrive dans ' + t1 + ' minutes.'
+                }
+
+            }
+            else if (req.body.answer === 2) {
+
+                let t1 = req.body.answer[0];
+                let t2 = req.body.answer[1];
+
+                if (t1 < 2 && t2 < 2) {
+                    sentence += 'Les deux prochains tramways sont proches.'
+                }
+                else if (t1 < 2 && !(t2 < 2)) {
+                    sentence += 'Le prochain tramway est proche, le suivant arrive dans ' + t2 + ' minutes.'
+                } else {
+                    sentence += 'Les prochain tramways arrivent dans ' + t1 + ' et ' + t2 + ' minutes.'
+                }
+
+            }
+            else if (req.body.answer === 3) {
+                let t1 = req.body.answer[0];
+                let t2 = req.body.answer[1];
+                let t3 = req.body.answer[2];
+
+                if (t1 < 2 && t2 < 2 && t3 < 2) {
+                    sentence += 'Les trois prochains tramways sont proches.'
+                }
+                else if (t1 < 2 && t2 < 2 && !(t3 < 2)) {
+                    sentence += 'Les deux prochain tramways sont proches, le suivant arrive dans ' + t3 + ' minutes.'
+                }
+                else if (t1 < 2 && !(t2 < 2) && !(t3 < 2)) {
+                    sentence += 'Le prochain tramway est proche. Les deux suivants arrivent dans ' + t2 + ' et ' + t3 + ' minutes.'
+                }
+                else if (!(t1 < 2) && !(t2 < 2) && !(t3 < 2)) {
+                    sentence += 'Les prochains tramways arrivent dans ' + t1 + ', ' + t2 + ' et ' + t3 + ' minutes.'
+                } else {
+                    sentence += 'Les prochains tramways arrivent dans ' + t1 + ', ' + t2 + ' et ' + t3 + ' minutes.'
+                }
+            } else {
+                sentence += 'Ce tramway est actuellement indisponible.'
+            }
+
+            req.body.answer = sentence;
+            next();
+        } catch (err) {
+            return res.send(400, 'Schedule:returnOneSchedule / ' + err.message)
+        }
+    },
 }
