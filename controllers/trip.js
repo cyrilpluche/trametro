@@ -264,6 +264,24 @@ module.exports = {
         }
     },
 
+    createOneShot(req, res, next) {
+        let body = {
+            tripDateCreation: moment(),
+            sessionId: req.query.sessionId,
+            travelerId: req.query.travelerId,
+            stationCode: req.query.stationCode,
+            ligneCode: req.query.ligneCode,
+            directionCode: req.query.directionCode,
+            isTripFinished: true
+        }
+        return Trip
+            .create(body)
+            .then(trip => {
+                next()
+            })
+            .catch(err => res.send(400, 'Trip:createOneShot / ' + err.message));
+    },
+
     /*
      *  req.body = {
      *      stationCode: String, (optional)

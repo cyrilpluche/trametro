@@ -2,7 +2,7 @@
   "deploy_settings": {
     "default": {
       "skill_id": "amzn1.ask.skill.451edf8e-f405-4d49-ac87-99cfd4da8c4e",
-      "was_cloned": true,
+      "was_cloned": false,
       "resources": {
         "manifest": {
           "eTag": "4c44dec013e8d18b1388e42bcc14d56e"
@@ -20,7 +20,7 @@
             "alexaUsage": [
               "custom/default"
             ],
-            "revisionId": "1677c840-03ee-49c0-84d3-46675a39b1c4"
+            "revisionId": "1f4c271f-1c6d-41f4-b738-bb553386a77b"
           }
         ]
       },

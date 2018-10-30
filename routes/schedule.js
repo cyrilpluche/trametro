@@ -20,8 +20,20 @@ router.get('/find_one_from_db', downloadMiddleware.fromURL, tripController.findO
 router.get('/find_all', downloadMiddleware.fromURL, parseMiddleware.parse, filterMiddleware.filtre, parseMiddleware.intToString, scheduleController.findAll);
 
 /* ======== NEW VERSION ======== */
-router.get('/one_shot', downloadMiddleware.fromURL, parseMiddleware.parse, filterMiddleware.oneShotFilter, scheduleController.returnOneSchedule)
-router.get('/session_shot', downloadMiddleware.fromURL, parseMiddleware.parse, filterMiddleware.oneShotFilter, scheduleController.returnThreeSchedule)
+router.get('/one_shot',
+    tripController.createOneShot,
+    downloadMiddleware.fromURL,
+    parseMiddleware.parse,
+    filterMiddleware.oneShotFilter,
+    scheduleController.returnOneSchedule
+)
+
+router.get('/session_shot',
+    downloadMiddleware.fromURL,
+    parseMiddleware.parse,
+    filterMiddleware.oneShotFilter,
+    scheduleController.returnThreeSchedule
+)
 
 
 
