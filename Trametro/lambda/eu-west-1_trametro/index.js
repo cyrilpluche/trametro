@@ -26,23 +26,6 @@ const handlers = {
                 this.emit(':tell', 'Une erreur est survenue, veuillez réessayer ou fermer Trametro.')
             });
     },
-    'SetUserName': function () {
-        /* Prepare the URL */
-        var userId = this.event.session.user.userId
-        var params = this.event.request.intent.slots
-        var url = "https://trametro.herokuapp.com/api/traveler/update/" + userId
-        var body = { travelerName: params.name.value }
-
-        /* Get the answer from the API */
-        axios.post(url, body)
-            .then((res) => {
-                if (res.data === true) this.emit(':ask', params.name.value + ', quelle ligne vous intéresse ?')
-                else this.emit(':ask', "Je n'ai pas bien compris, pouvez-vous répéter votre prénom ?")
-            })
-            .catch((error) => {
-                this.emit(':tell', 'Une erreur est survenue, veuillez réessayer ou fermer Trametro.')
-            });
-    },
     'ChooseTripIndent': function () {
         // We retrieve the query arguments
         let travelerId = this.event.session.user.userId
