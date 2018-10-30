@@ -16,7 +16,7 @@ router.post('/update/:id', travelerController.update);
 
 /* ======== NEW VERSION ======== */
 router.post('/start_session', travelerController.get, travelerController.create)
-router.put('/store_favorite', tripController.get, travelerController.update)
+router.put('/store_favorite', tripController.getLastFinished, travelerController.update)
 
 router.get('/get_favorite',
     travelerController.get,

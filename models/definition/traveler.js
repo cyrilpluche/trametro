@@ -13,11 +13,6 @@ module.exports = (sequelize, DataTypes) => {
             field: 'traveler_name',
             allowNull: true
         },
-        travelerStatus: {
-            type: DataTypes.INTEGER,
-            field: 'traveler_status',
-            allowNull: false
-        },
         tripFavorite: {
             type: DataTypes.STRING(250),
             field: 'trip_favorite',

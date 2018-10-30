@@ -86,11 +86,10 @@ module.exports = {
             let keys = req.query;
 
             req.body.brutValues = []
-
             // Convert inputs in usable values for the csv
-            req.body.ligneTAM = helper.ligneToTam(keys.ligne)
-            req.body.stationTAM = helper.stationToTAM(keys.station, req.body.ligneTAM)
-            req.body.directionTAM = helper.directionToTAM(keys.direction)
+            req.body.ligneTAM = helper.ligneToTam(keys.ligneCode)
+            req.body.stationTAM = helper.stationToTAM(keys.stationCode, req.body.ligneTAM)
+            req.body.directionTAM = helper.directionToTAM(keys.directionCode)
 
             // We handle the special case of the tramway 4
             if (req.body.directionTAM === "sens a") {

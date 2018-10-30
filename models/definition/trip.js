@@ -54,6 +54,11 @@ module.exports = (sequelize, DataTypes) => {
             },
             onUpdate: 'NO ACTION',
             onDelete: 'NO ACTION'
+        },
+        tripDateCreation: {
+            type: DataTypes.DATEONLY,
+            field: 'trip_date_creation',
+            allowNull: false
         }
     }, {
         schema: 'public',

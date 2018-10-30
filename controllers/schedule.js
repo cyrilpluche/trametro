@@ -65,8 +65,8 @@ module.exports = {
     /* ======== NEW VERSION ========= */
     returnOneSchedule(req, res, next) {
         try {
-            console.log(req.body.answer)
-            if (req.body.answer[0]) {
+            if (req.body.answer.length > 1) {
+                console.log()
                 var sentence = 'Le tramway '
 
                 // We choose between two format of sentence

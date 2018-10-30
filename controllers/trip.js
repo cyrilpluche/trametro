@@ -1,4 +1,5 @@
 var Trip = require('../config/db_connection').Trip;
+var moment = require('moment')
 var sequelize = require('../config/db_connection').sequelize;
 
 module.exports = {
@@ -173,9 +174,36 @@ module.exports = {
     get(req, res, next) {
         return Trip
             .findOne({
+                order: sequelize.col('tripDateCreation'),
                 where:  {
                     sessionId: req.query.sessionId,
-                    travelerId: req.query.travelerId
+                    travelerId: req.query.travelerId,
+                    isTripFinished: false
+                }
+            })
+            .then(trip => {
+                console.log('TRIP TRIP')
+                console.log(trip)
+                req.body.answer = trip;
+                next();
+            })
+            .catch (err => {
+                res.send(400, 'Trip:get / ' + err.message);
+            })
+    },
+
+    /* ================ NEW VERSION ================== */
+    /*
+     * Return: Find the trip with the given id.
+     */
+    getLastFinished(req, res, next) {
+        return Trip
+            .findOne({
+                order: [sequelize.literal('trip_id DESC')],
+                where:  {
+                    sessionId: req.query.sessionId,
+                    travelerId: req.query.travelerId,
+                    isTripFinished: true
                 }
             })
             .then(trip => {
@@ -225,6 +253,7 @@ module.exports = {
             next()
         } else {
             // Trip is new
+            req.body.tripDateCreation = moment()
             return Trip
                 .create(req.body)
                 .then(trip => {
@@ -253,7 +282,8 @@ module.exports = {
             .update(req.body, {
                 where: {
                     travelerId: req.query.travelerId,
-                    sessionId: req.query.sessionId
+                    sessionId: req.query.sessionId,
+                    tripId: req.body.answer.tripId
                 }
             })
             .then(isUpdated => {
@@ -284,7 +314,7 @@ module.exports = {
             isComplete = false
         }
 
-        req.body.answer = [isComplete, sentence]
+        req.body.answer = [isComplete, sentence, t.tripDateCreation]
         next()
     },
 
@@ -293,9 +323,10 @@ module.exports = {
      */
     bodyToQuery (req, res, next) {
         try {
-            req.query.ligne = req.body.answer.dataValues.ligneCode
-            req.query.station = req.body.answer.dataValues.stationCode
-            req.query.direction = req.body.answer.dataValues.directionCode
+            req.query.tripId = req.body.answer.dataValues.tripId
+            req.query.ligneCode = req.body.answer.dataValues.ligneCode
+            req.query.stationCode = req.body.answer.dataValues.stationCode
+            req.query.directionCode = req.body.answer.dataValues.directionCode
             next()
         } catch (err) {
             res.send(400, 'Trip:bodyToQuery / ' + err.message)
@@ -310,7 +341,8 @@ module.exports = {
             .update({ isTripFinished: true }, {
                 where: {
                     travelerId: req.query.travelerId,
-                    sessionId: req.query.sessionId
+                    sessionId: req.query.sessionId,
+                    tripId: req.query.tripId
                 }
             })
             .then(isUpdated => {

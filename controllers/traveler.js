@@ -120,8 +120,7 @@ module.exports = {
             // User is new
             return Traveler
                 .create({
-                    travelerId: req.query.travelerId,
-                    travelerStatus: 0
+                    travelerId: req.query.travelerId
                 })
                 .then(traveler => {
                     req.body.answer = traveler
@@ -140,7 +139,7 @@ module.exports = {
      */
     update(req, res, next) {
         try {
-            if (req.body.answer.dataValues.isTripFinished) {
+            if (req.body.answer.dataValues) {
                 return Traveler
                     .update({ tripFavorite: req.body.answer.dataValues.tripId }, {
                         where: { travelerId: req.query.travelerId }
