@@ -30,16 +30,4 @@ router.get('/get_and_reset',
     scheduleController.returnOneSchedule
 )
 
-
-router.get('/test', (req, res, next) => {
-    var print = {
-        travelerId: 'traveler',
-        sessionId: 'session'
-    }
-
-    // We build the query for request
-    var query = mw.requestBuilder.builder(print)
-    req.body.answer = query
-    next()
-})
 module.exports = router;

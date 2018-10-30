@@ -1,0 +1,588 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "trametro montpellier",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "ChooseLigneIndent",
+          "slots": [
+            {
+              "name": "ligne",
+              "type": "LIGNE_NUMBER"
+            },
+            {
+              "name": "direction",
+              "type": "DIRECTION"
+            },
+            {
+              "name": "station",
+              "type": "STATION"
+            }
+          ],
+          "samples": [
+            "tram {ligne} direction {direction} array {station}",
+            "{ligne} {direction} {station}",
+            "tram {ligne} direction {direction} arrêt {station}",
+            "tram {ligne}",
+            "donne moi la ligne {ligne}",
+            "je veux la ligne {ligne}",
+            "ligne {ligne}",
+            "la ligne {ligne}"
+          ]
+        },
+        {
+          "name": "ChooseDirectionIndent",
+          "slots": [
+            {
+              "name": "direction",
+              "type": "DIRECTION"
+            }
+          ],
+          "samples": [
+            "{direction}",
+            "vers {direction}",
+            "direction {direction}"
+          ]
+        },
+        {
+          "name": "ChooseStationIndent",
+          "slots": [
+            {
+              "name": "station",
+              "type": "STATION"
+            }
+          ],
+          "samples": [
+            "{station}",
+            "à {station}",
+            "arrêt {station}"
+          ]
+        },
+        {
+          "name": "NewInformationIndent",
+          "slots": [
+            {
+              "name": "decision",
+              "type": "OUINON"
+            }
+          ],
+          "samples": [
+            "{decision}"
+          ]
+        },
+        {
+          "name": "AllSchedulesIndent",
+          "slots": [
+            {
+              "name": "ligne",
+              "type": "LIGNE_NUMBER"
+            },
+            {
+              "name": "direction",
+              "type": "DIRECTION"
+            },
+            {
+              "name": "station",
+              "type": "STATION"
+            }
+          ],
+          "samples": [
+            "quand sont les prochains tramways ligne {ligne} direction {direction} array {station}",
+            "quand sont les prochains tramways ligne {ligne} direction {direction} arrêt {station}",
+            "les prochains tramways ligne {ligne} direction {direction} à {station}",
+            "quand sont les prochains tramways ligne {ligne} direction {direction} à {station}"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "values": [
+            {
+              "name": {
+                "value": "4",
+                "synonyms": [
+                  "quatre"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "3",
+                "synonyms": [
+                  "trois",
+                  "3"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "2",
+                "synonyms": [
+                  "deux",
+                  "2"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "1",
+                "synonyms": [
+                  "une",
+                  "un",
+                  "1"
+                ]
+              }
+            }
+          ],
+          "name": "LIGNE_NUMBER"
+        },
+        {
+          "values": [
+            {
+              "name": {
+                "value": "garcia lorca"
+              }
+            },
+            {
+              "name": {
+                "value": "perols etang"
+              }
+            },
+            {
+              "name": {
+                "value": "lattes centre"
+              }
+            },
+            {
+              "name": {
+                "value": "juvignac"
+              }
+            },
+            {
+              "name": {
+                "value": "sabines"
+              }
+            },
+            {
+              "name": {
+                "value": "nd de sablassou",
+                "synonyms": [
+                  "sablassou",
+                  "notre dame de sablassou"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "st-jean de vedas",
+                "synonyms": [
+                  "saint jean de vedas"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "jacou"
+              }
+            },
+            {
+              "name": {
+                "value": "mosson",
+                "synonyms": [
+                  "mossan",
+                  "maussan",
+                  "mausson"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "odysseum"
+              }
+            }
+          ],
+          "name": "DIRECTION"
+        },
+        {
+          "values": [
+            {
+              "name": {
+                "value": "vil. d'angouleme",
+                "synonyms": [
+                  "angoulème",
+                  "village d'angouleme",
+                  "ville d'angouleme"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "victoire 2",
+                "synonyms": [
+                  "victoire",
+                  "victoire de",
+                  "victoire deux"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "via domitia",
+                "synonyms": [
+                  "domitia"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "st-jean le sec",
+                "synonyms": [
+                  "saint jean le sec"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "st-jean centre",
+                "synonyms": [
+                  "saint jean centre"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "saint-lazare",
+                "synonyms": [
+                  "saint lazare"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "saint-cleophas",
+                "synonyms": [
+                  "saint cleophas"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "sabines",
+                "synonyms": [
+                  "sabine"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "rondelet"
+              }
+            },
+            {
+              "name": {
+                "value": "plankstadt"
+              }
+            },
+            {
+              "name": {
+                "value": "nouveau st-roch",
+                "synonyms": [
+                  "nouveau saint roch"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "nd de sablassou",
+                "synonyms": [
+                  "dame de sablassou",
+                  "sablassou",
+                  "notre dame de sablassou"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "mas drevon"
+              }
+            },
+            {
+              "name": {
+                "value": "mail des abbes",
+                "synonyms": [
+                  "mail des abbés"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "les grisettes"
+              }
+            },
+            {
+              "name": {
+                "value": "lemasson",
+                "synonyms": [
+                  "le masson"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "la galine"
+              }
+            },
+            {
+              "name": {
+                "value": "la condamine"
+              }
+            },
+            {
+              "name": {
+                "value": "georges pompidou"
+              }
+            },
+            {
+              "name": {
+                "value": "gare st-roch",
+                "synonyms": [
+                  "gare saint rock",
+                  "gare saint roch"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "croix d'argent"
+              }
+            },
+            {
+              "name": {
+                "value": "clairval"
+              }
+            },
+            {
+              "name": {
+                "value": "ch. de gaulle",
+                "synonyms": [
+                  "charles de gaulle"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "centurions"
+              }
+            },
+            {
+              "name": {
+                "value": "beaux-arts"
+              }
+            },
+            {
+              "name": {
+                "value": "aube rouge"
+              }
+            },
+            {
+              "name": {
+                "value": "universites",
+                "synonyms": [
+                  "fac des sciences",
+                  "université des sciences",
+                  "université"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "stade mosson"
+              }
+            },
+            {
+              "name": {
+                "value": "saint-paul"
+              }
+            },
+            {
+              "name": {
+                "value": "saint-eloi"
+              }
+            },
+            {
+              "name": {
+                "value": "rives du lez"
+              }
+            },
+            {
+              "name": {
+                "value": "port marianne"
+              }
+            },
+            {
+              "name": {
+                "value": "place de france"
+              }
+            },
+            {
+              "name": {
+                "value": "place albert 1er"
+              }
+            },
+            {
+              "name": {
+                "value": "place de l'europe"
+              }
+            },
+            {
+              "name": {
+                "value": "philippides"
+              }
+            },
+            {
+              "name": {
+                "value": "odysseum"
+              }
+            },
+            {
+              "name": {
+                "value": "occitanie"
+              }
+            },
+            {
+              "name": {
+                "value": "moulares"
+              }
+            },
+            {
+              "name": {
+                "value": "mondial 98"
+              }
+            },
+            {
+              "name": {
+                "value": "millenaire"
+              }
+            },
+            {
+              "name": {
+                "value": "malbosc"
+              }
+            },
+            {
+              "name": {
+                "value": "louis blanc"
+              }
+            },
+            {
+              "name": {
+                "value": "leon blum"
+              }
+            },
+            {
+              "name": {
+                "value": "hopital lapeyronie"
+              }
+            },
+            {
+              "name": {
+                "value": "hauts de massane"
+              }
+            },
+            {
+              "name": {
+                "value": "halles paillade",
+                "synonyms": [
+                  "ale paillade"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "gare saint-roch"
+              }
+            },
+            {
+              "name": {
+                "value": "comedie"
+              }
+            },
+            {
+              "name": {
+                "value": "du guesclin"
+              }
+            },
+            {
+              "name": {
+                "value": "euromedecine",
+                "synonyms": [
+                  "euromédecine"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "chateau d'o",
+                "synonyms": [
+                  "chateau d' o",
+                  "château d'o",
+                  "château d'do"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "boutonnet",
+                "synonyms": [
+                  "boutonné"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "corum"
+              }
+            },
+            {
+              "name": {
+                "value": "antigone"
+              }
+            }
+          ],
+          "name": "STATION"
+        },
+        {
+          "values": [
+            {
+              "name": {
+                "value": "non"
+              }
+            },
+            {
+              "name": {
+                "value": "oui"
+              }
+            }
+          ],
+          "name": "OUINON"
+        }
+      ]
+    }
+  }
+}
