@@ -277,6 +277,7 @@ module.exports = {
         return Trip
             .create(body)
             .then(trip => {
+                console.log(trip)
                 next()
             })
             .catch(err => res.send(400, 'Trip:createOneShot / ' + err.message));

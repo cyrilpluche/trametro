@@ -29,6 +29,7 @@ router.get('/one_shot',
 )
 
 router.get('/session_shot',
+    tripController.createOneShot,
     downloadMiddleware.fromURL,
     parseMiddleware.parse,
     filterMiddleware.oneShotFilter,

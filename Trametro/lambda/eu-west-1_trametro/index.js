@@ -168,9 +168,11 @@ const handlers = {
     },
     'AllSchedulesIndent': function () {
         /* Prepare the URL */
+        let travelerId = this.event.session.user.userId
+        let sessionId = this.event.session.sessionId
         var params = this.event.request.intent.slots
         var args = mw.parser.parseLigneIndent(params)
-        var url = "https://trametro.herokuapp.com/api/schedule/find_all?id=" + args.ligne + "&stop=" + args.station + "&destination=" + args.direction
+        var url = "https://trametro.herokuapp.com/api/schedule/find_all?travelerId=" + travelerId + "&sessionId=" + sessionId + "&ligneCode=" + args.ligneCode + "&stationCode=" + args.stationCode + "&directionCode=" + args.directionCode
 
         /* Get the answer from the API */
         https.get(url, (resp) => {
