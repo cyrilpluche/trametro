@@ -22,10 +22,13 @@ const handlers = {
                 this.emit(':ask', "Bienvenue sur Trametro. Je peux vous renseigner sur les prochains tramways de montpellier. Qu'est-ce qui vous intéresse ?")
             })
             .catch((error) => {
-                this.emit(':tell', 'Une erreur est survenue, veuillez réessayer ou fermer Trametro.')
+                this.emit(':ask', 'Bienvenue sur Trametro. Je peux vous renseigner sur les prochains tramways de montpellier. Qu\'est-ce qui vous intéresse ?')
             });
+
     },
     'ChooseTripIndent': function () {
+        // Get the ligne, direction & station of a single voice indent --> Send back the next tramway
+
         // We retrieve the query arguments
         let travelerId = this.event.session.user.userId
         let sessionId = this.event.session.sessionId
@@ -42,7 +45,7 @@ const handlers = {
                 this.emit(':ask', res.data)
             })
             .catch((error) => {
-                this.emit(':tell', error.message)
+                this.emit(':ask', "Je crois que ce tramway ne circule pas actuellement. Essayez avec un autre peut-être ?")
             });
     },
     'ChooseLigneIndent': function () {
@@ -74,7 +77,7 @@ const handlers = {
                             this.emit(':ask', res.data)
                         })
                         .catch((error) => {
-                            this.emit(':tell', error.message)
+                            this.emit(':ask', "Pas d'horaires disponible. Une autre idée ?")
                         });
                 } else {
                     // Session fields not complete
@@ -82,7 +85,7 @@ const handlers = {
                 }
             })
             .catch((error) => {
-                this.emit(':tell', error.message)
+                this.emit(':tell', "Vous parlez d'une ligne ? laquelle ?")
             });
     },
     'ChooseDirectionIndent': function () {
@@ -114,7 +117,7 @@ const handlers = {
                             this.emit(':ask', res.data)
                         })
                         .catch((error) => {
-                            this.emit(':tell', error.message)
+                            this.emit(':ask', "Pas de tramway en ce moment. Un autre trajet sûrement ?")
                         });
                 } else {
                     // Session fields not complete
@@ -122,7 +125,7 @@ const handlers = {
                 }
             })
             .catch((error) => {
-                this.emit(':tell', error.message)
+                this.emit(':tell', "Pardon, quelle direction ?")
             });
     },
     'ChooseStationIndent': function () {
@@ -145,7 +148,7 @@ const handlers = {
             travelerId: travelerId
         }
 
-        // We store the ligne
+        // We store the Station
         axios.post(url, body)
             .then((res) => {
                 if (res.data[0]) {
@@ -155,7 +158,7 @@ const handlers = {
                             this.emit(':ask', res.data)
                         })
                         .catch((error) => {
-                            this.emit(':tell', error.message)
+                            this.emit(':ask', "Pas de tram en ce moment. Un autre trajet sûrement ?")
                         });
                 } else {
                     // Session fields not complete
@@ -163,7 +166,7 @@ const handlers = {
                 }
             })
             .catch((error) => {
-                this.emit(':tell', error.message)
+                this.emit(':tell', "Pouvez-vous juste répéter quel arrêt ?")
             });
     },
     'AllSchedulesIndent': function () {
@@ -172,20 +175,16 @@ const handlers = {
         let sessionId = this.event.session.sessionId
         var params = this.event.request.intent.slots
         var args = mw.parser.parseLigneIndent(params)
-        var url = "https://trametro.herokuapp.com/api/schedule/find_all?travelerId=" + travelerId + "&sessionId=" + sessionId + "&ligneCode=" + args.ligneCode + "&stationCode=" + args.stationCode + "&directionCode=" + args.directionCode
+        var url = "https://trametro.herokuapp.com/api/schedule/session_shot?travelerId=" + travelerId + "&sessionId=" + sessionId + "&ligneCode=" + args.ligneCode + "&stationCode=" + args.stationCode + "&directionCode=" + args.directionCode
 
         /* Get the answer from the API */
-        https.get(url, (resp) => {
-            let data = '';
-            resp.on('data', (chunk) => {
-                data += chunk;
+        axios.get(url)
+            .then((res) => {
+                this.emit(':ask', res.data)
+            })
+            .catch((error) => {
+                this.emit(':tell', "Le service est terminé ou cette combinaison n'existe pas. Besoin d'autre chose ?")
             });
-            resp.on('end', () => {
-                //this.emit(':ask', args.ligne + " " + args.direction + " " + args.station)
-
-                this.emit(':ask', data + ". 'Désirez-vous une autre information ?'")
-            });
-        })
     },
     'StoreFavoriteIndent': function () {
         // We retrieve the current user & the session he is dealing with.
@@ -201,7 +200,7 @@ const handlers = {
                 this.emit(':ask', res.data)
             })
             .catch((error) => {
-                this.emit(':tell', error.message)
+                this.emit(':tell', "J'ai besoin d'au moins un trajet valide pour ça. On commence par le quel ?")
             });
     },
     'GetFavoriteIndent': function () {
@@ -217,114 +216,7 @@ const handlers = {
                 this.emit(':ask', res.data)
             })
             .catch((error) => {
-                this.emit(':tell', error.message)
-            });
-    },
-    'NewInformationIndent': function () {
-        var params = this.event.request.intent.slots
-        var userId = this.event.session.user.userId
-        var sessionId = this.event.session.sessionId
-        var url1 = "https://trametro.herokuapp.com/api/traveler/find_one?id=" + userId
-        var url2 = "https://trametro.herokuapp.com/api/traveler/update/" + userId
-        var url3 = "https://trametro.herokuapp.com/api/trip/store_new_favorite_trip?id=" + userId + '&session=' + sessionId
-        var url4 = "https://trametro.herokuapp.com/api/schedule/find_one_from_db?id=" + userId + "&session=" + sessionId + "&isfav=" + true + "&isFromDb=" + true + "&status=" + '4'
-
-        /* First we get the user */
-        axios.get(url1)
-            .then((traveler) => {
-                if (params.decision.value === 'oui') {
-
-                    if (traveler.data.travelerStatus === '0') {
-                        // The user didn't complete a session trip
-                        this.emit(':ask', 'Reprenons du début. Quelle ligne de tramway vous intéresse ?')
-                    }
-                    else if (traveler.data.travelerStatus === '1') {
-                        // The user still want to ask random trips
-                        let body = { travelerStatus: 2 }
-                        axios.post(url2, body)
-                            .then((res) => {
-                                if (res.data === true) this.emit(':ask', 'Quelle ligne de tramway vous intéresse ?')
-                                else this.emit(':ask', "Je n'ai pas bien compris, une autre ligne vous intéresse ?")
-                            })
-                    }
-
-                    else if (traveler.data.travelerStatus === '2') {
-                        // The user want to set up this trip as favorite trip
-                        axios.post(url3)
-                            .then((res) => {
-                                if (res.data === true) this.emit(':tell', 'Voyage ajouté en favori. A bientôt ' + traveler.data.travelerName + ' !')
-                                else this.emit(':tell', 'Un problème est survenu. A bientôt ' + traveler.data.travelerName + ' !')
-                            })
-                            .catch((error) => {
-                                this.emit(':tell', 'Une erreur est survenue, veuillez réessayer ou fermer Trametro.')
-                            });
-
-                        // END
-                    }
-                    else if (traveler.data.travelerStatus === '3') {
-                        // The user want his favorite trip
-                        axios.get(url4)
-                            .then((fav) => {
-                                // The user have a fav trip
-                                this.emit(':ask', fav.data + ". Désirez-vous une autre information ?")
-                            })
-                            .catch((error) => {
-                                this.emit(':tell', 'Une erreur est survenue, veuillez réessayer ou fermer Trametro.')
-                            });
-                    }
-
-                    else if (traveler.data.travelerStatus === '4') {
-                        // The user still want to ask random trips
-                        let body = { travelerStatus: 5 }
-                        axios.post(url2, body)
-                            .then((res) => {
-                                if (res.data === true) this.emit(':ask', 'Quelle ligne de tramway vous intéresse ?')
-                                else this.emit(':ask', "Je n'ai pas bien compris, quelle ligne vous intéresse ?")
-                            })
-                    } else {
-                        // The user said yes in an unusual moment
-                        this.emit(':tell', 'A bientôt ' + traveler.data.travelerName + ' !')
-                    }
-
-                } else if (params.decision.value === 'non') {
-
-                    if (traveler.data.travelerStatus === '1') {
-                        // The user don't want to ask random trips anymore. Make fav ?
-                        let body = { travelerStatus: 2 }
-                        axios.post(url2, body)
-                            .then((res) => {
-                                if (res.data === true) this.emit(':ask', 'Voulez-vous garder ce trajet comme favori ?')
-                                else this.emit(':ask', "Je n'ai pas bien compris, voulez-vous garder cette ligne en favori ?")
-                            })
-                    }
-
-                    else if (traveler.data.travelerStatus === '2') {
-                        // The user don't want to keep this as a favorite trip
-                        this.emit(':tell', 'A bientôt ' + traveler.data.travelerName + ' !')
-                        // END
-                    }
-
-                    else if (traveler.data.travelerStatus === '3') {
-                        // The user still want to ask random trips
-                        let body = { travelerStatus: 5 }
-                        axios.post(url2, body)
-                            .then((res) => {
-                                if (res.data === true) this.emit(':ask', 'Quelle ligne de tramway vous intéresse ?')
-                                else this.emit(':ask', "Je n'ai pas bien compris, quelle ligne vous intéresse ?")
-                            })
-                    }
-
-                    else if (traveler.data.travelerStatus === '4') {
-                        // The user don't want anything
-                        this.emit(':tell', 'A bientôt ' + traveler.data.travelerName + ' !')
-                        // END
-                    }
-
-                    else this.emit(':tell', 'A bientôt ' + traveler.data.travelerName + ' !')
-                }
-            })
-            .catch((error) => {
-                this.emit(':tell', 'Une erreur est survenue, veuillez réessayer ou fermer Trametro.')
+                this.emit(':tell', "Vous n'avez aucun trajet en favori. Commencez par me demander une horaire.")
             });
     },
     'AMAZON.HelpIntent': function () {
@@ -334,16 +226,7 @@ const handlers = {
 
     },
     'AMAZON.StopIntent': function () {
-        var userId = this.event.session.user.userId
-        var url = 'https://trametro.herokuapp.com/api/traveler/find_one/' + userId
-
-        axios.get(url)
-            .then((res) => {
-                this.emit(':tell', 'A bientôt ' + res.data.travelerName + ' !')
-            })
-            .catch((error) => {
-                this.emit(':tell', 'A bientôt !')
-            });
+        this.emit(':tell', 'A bientôt, sur Trametro !')
     },
 };
 
