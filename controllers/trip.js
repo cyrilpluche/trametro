@@ -19,8 +19,6 @@ module.exports = {
                 }
             })
             .then(trip => {
-                console.log('TRIP TRIP')
-                console.log(trip)
                 req.body.answer = trip;
                 next();
             })
@@ -205,5 +203,29 @@ module.exports = {
                 else res.send(400, 'Trip:setFinished / Trip had not been modified.')
             })
             .catch(err => res.send(400, 'Trip:setFinished / ' + err.message));
+    },
+
+    deleteIfNeeded (req, res, next) {
+        try {
+            return Trip
+                .destroy({
+                    where: {
+                        tripId: req.body.answer.tripId
+                    }
+                })
+                .then(isDeleted => {
+                    req.body.answer = {
+                        found: true,
+                        isDeleted: isDeleted === 1
+                    }
+                    next()
+                })
+                .catch(err => res.send(400, 'Trip:deleteIfNeeded / ' + err.message));
+        } catch (err) {
+            req.body.answer = {
+                found: false
+            }
+            next()
+        }
     }
 }

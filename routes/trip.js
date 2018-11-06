@@ -9,9 +9,8 @@ var express = require('express');
 var router = express.Router();
 var tripController = require('../controllers').trip;
 
-/* ======== NEW VERSION ======== */
 router.post('/update_session', tripController.get, tripController.create, tripController.update, tripController.get, tripController.findMissingArguments);
-
+router.delete('/delete_last_not_complete',  tripController.get, tripController.deleteIfNeeded)
 router.get('/get_and_reset',
     tripController.get,
     tripController.bodyToQuery,

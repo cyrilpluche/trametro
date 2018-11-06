@@ -200,7 +200,7 @@ const handlers = {
                 this.emit(':ask', res.data)
             })
             .catch((error) => {
-                this.emit(':tell', "J'ai besoin d'au moins un trajet valide pour ça. On commence par le quel ?")
+                this.emit(':tell', "J'ai besoin d'au moins un trajet valide pour ça. On commence par lequel ?")
             });
     },
     'GetFavoriteIndent': function () {
@@ -220,13 +220,55 @@ const handlers = {
             });
     },
     'AMAZON.HelpIntent': function () {
+        // We retrieve the current user & the session he is dealing with.
+        let travelerId = this.event.session.user.userId
+        let sessionId = this.event.session.sessionId
+        let query = "?travelerId=" + travelerId + '&sessionId=' + sessionId
 
+        // We build the URL
+        let url = "https://trametro.herokuapp.com/api/trip/delete_last_not_complete" + query
+
+        axios.delete(url)
+            .then((res) => {
+                this.emit(':ask', 'Vous pouvez obtenir une horaire en donnant une ligne, une direction et un arrêt de tramway de Montpellier. Vous pouvez aussi garder un tramway en favori pour les prochaines sessions. Quelle ligne vous intéresse ?')
+            })
+            .catch((error) => {
+                this.emit(':ask', 'Vous pouvez obtenir une horaire en donnant une ligne, une direction et un arrêt de tramway de Montpellier. Vous pouvez aussi garder un tramway en favori pour les prochaines sessions. Quelle ligne vous intéresse ?')
+            });
     },
     'AMAZON.CancelIntent': function () {
+        // We retrieve the current user & the session he is dealing with.
+        let travelerId = this.event.session.user.userId
+        let sessionId = this.event.session.sessionId
+        let query = "?travelerId=" + travelerId + '&sessionId=' + sessionId
 
+        // We build the URL
+        let url = "https://trametro.herokuapp.com/api/trip/delete_last_not_complete" + query
+
+        axios.delete(url)
+            .then((res) => {
+                this.emit(':tell', 'A bientôt, sur Trametro !')
+            })
+            .catch((error) => {
+                this.emit(':tell', 'A bientôt, sur Trametro !')
+            });
     },
     'AMAZON.StopIntent': function () {
-        this.emit(':tell', 'A bientôt, sur Trametro !')
+        // We retrieve the current user & the session he is dealing with.
+        let travelerId = this.event.session.user.userId
+        let sessionId = this.event.session.sessionId
+        let query = "?travelerId=" + travelerId + '&sessionId=' + sessionId
+
+        // We build the URL
+        let url = "https://trametro.herokuapp.com/api/trip/delete_last_not_complete" + query
+
+        axios.delete(url)
+            .then((res) => {
+                this.emit(':tell', 'A bientôt, sur Trametro !')
+            })
+            .catch((error) => {
+                this.emit(':tell', 'A bientôt, sur Trametro !')
+            });
     },
 };
 
