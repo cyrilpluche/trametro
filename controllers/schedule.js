@@ -156,7 +156,7 @@ module.exports = {
                 if (t1 < 2) {
                     answer.push('proche')
                 } else {
-                    answer.push(t1)
+                    answer.push(t1 + ' minutes')
                 }
 
             }
@@ -166,7 +166,7 @@ module.exports = {
                 if (t2 < 2) {
                     answer.push('proche')
                 } else {
-                    answer.push(t2)
+                    answer.push(t2 + ' minutes')
                 }
 
             }
@@ -177,7 +177,7 @@ module.exports = {
                 if (t3 < 2) {
                     answer.push('proche')
                 } else {
-                    answer.push(t3)
+                    answer.push(t3 + ' minutes')
                 }
 
             }
