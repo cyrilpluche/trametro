@@ -27,6 +27,12 @@ router.get('/session_shot',
     scheduleController.returnThreeSchedule
 )
 
-
+router.get('/session_shot_virgin',
+    tripController.createOneShot,
+    downloadMiddleware.fromURL,
+    parseMiddleware.parse,
+    filterMiddleware.oneShotFilter,
+    scheduleController.returnVirginSchedule
+)
 
 module.exports = router;

@@ -86,8 +86,7 @@ module.exports = {
         }
     },
 
-    returnThreeSchedule(req, res, next) {
-        console.log(req.body.answer)
+    returnThreeSchedule (req, res, next) {
         try {
             var sentence = '';
 
@@ -146,4 +145,47 @@ module.exports = {
             return res.send(400, 'Schedule:returnOneSchedule / ' + err.message)
         }
     },
+
+    returnVirginSchedule (req, res, next) {
+        try {
+            var answer = [];
+
+            if (req.body.answer.length > 0) {
+
+                let t1 = req.body.answer[0];
+                if (t1 < 2) {
+                    answer.push('proche')
+                } else {
+                    answer.push(t1)
+                }
+
+            }
+            if (req.body.answer.length > 1) {
+
+                let t2 = req.body.answer[1];
+                if (t2 < 2) {
+                    answer.push('proche')
+                } else {
+                    answer.push(t2)
+                }
+
+            }
+
+            if (req.body.answer.length > 2) {
+
+                let t3 = req.body.answer[2];
+                if (t3 < 2) {
+                    answer.push('proche')
+                } else {
+                    answer.push(t3)
+                }
+
+            }
+
+            req.body.answer = answer;
+            next();
+        } catch (err) {
+            return res.send(400, 'Schedule:returnOneSchedule / ' + err.message)
+        }
+    }
 }
