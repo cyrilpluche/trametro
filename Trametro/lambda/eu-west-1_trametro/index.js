@@ -2,6 +2,9 @@ const mw = require('./alexa-middlewares');
 const https = require('https');
 const axios = require('axios')
 
+const askAgain = ' Quelle autre ligne vous intéresse ?'
+const reprompt = "Pour plus d'insctructions sur comment utiliser Trametro, dites 'aide moi'."
+
 'use strict';
 const Alexa = require('alexa-sdk');
 
@@ -17,12 +20,13 @@ const handlers = {
         // We build the URL
         let url = "https://trametro.herokuapp.com/api/traveler/start_session" + query
 
+        let speech = "Bienvenue sur Trametro ! Je peux vous renseigner sur les prochains tramways de montpellier. Quelle ligne vous intéresse ? "
         axios.post(url)
             .then((res) => {
-                this.emit(':ask', "Bienvenue sur Trametro. Je peux vous renseigner sur les prochains tramways de montpellier. Qu'est-ce qui vous intéresse ?")
+                this.emit(':ask', speech, reprompt)
             })
             .catch((error) => {
-                this.emit(':ask', 'Bienvenue sur Trametro. Je peux vous renseigner sur les prochains tramways de montpellier. Qu\'est-ce qui vous intéresse ?')
+                this.emit(':ask', speech, reprompt)
             });
 
     },
@@ -42,10 +46,10 @@ const handlers = {
         // We get the schedule
         axios.get(url)
             .then((res) => {
-                this.emit(':ask', res.data)
+                this.emit(':ask', res.data + askAgain, reprompt)
             })
             .catch((error) => {
-                this.emit(':ask', "Je crois que ce tramway ne circule pas actuellement. Essayez avec un autre peut-être ?")
+                this.emit(':ask', "Je crois que ce tramway ne circule pas actuellement. Essayez avec un autre peut-être ?", reprompt)
             });
     },
     'ChooseLigneIndent': function () {
@@ -74,10 +78,10 @@ const handlers = {
                     // We have a complete session
                     axios.get(url1)
                         .then((res) => {
-                            this.emit(':ask', res.data)
+                            this.emit(':ask', res.data + askAgain, reprompt)
                         })
                         .catch((error) => {
-                            this.emit(':ask', "Pas d'horaires disponible. Une autre idée ?")
+                            this.emit(':ask', "Pas d'horaires disponible. Une autre idée ?", reprompt)
                         });
                 } else {
                     // Session fields not complete
@@ -85,7 +89,7 @@ const handlers = {
                 }
             })
             .catch((error) => {
-                this.emit(':tell', "Vous parlez d'une ligne ? laquelle ?")
+                this.emit(':tell', "Vous parlez d'une ligne ? laquelle ?", reprompt)
             });
     },
     'ChooseDirectionIndent': function () {
@@ -114,18 +118,18 @@ const handlers = {
                     // We have a complete session
                     axios.get(url1)
                         .then((res) => {
-                            this.emit(':ask', res.data)
+                            this.emit(':ask', res.data + askAgain, reprompt)
                         })
                         .catch((error) => {
-                            this.emit(':ask', "Pas de tramway en ce moment. Un autre trajet sûrement ?")
+                            this.emit(':ask', "Pas de tramway en ce moment. Un autre trajet sûrement ? ", reprompt)
                         });
                 } else {
                     // Session fields not complete
-                    this.emit(':ask', res.data[1])
+                    this.emit(':ask', res.data[1], reprompt)
                 }
             })
             .catch((error) => {
-                this.emit(':tell', "Pardon, quelle direction ?")
+                this.emit(':tell', "Pardon, quelle direction ? ", reprompt)
             });
     },
     'ChooseStationIndent': function () {
@@ -155,18 +159,18 @@ const handlers = {
                     // We have a complete session
                     axios.get(url1)
                         .then((res) => {
-                            this.emit(':ask', res.data)
+                            this.emit(':ask', res.data + askAgain, reprompt)
                         })
                         .catch((error) => {
-                            this.emit(':ask', "Pas de tram en ce moment. Un autre trajet sûrement ?")
+                            this.emit(':ask', "Pas de tram en ce moment. Un autre trajet sûrement ? ", reprompt)
                         });
                 } else {
                     // Session fields not complete
-                    this.emit(':ask', res.data[1])
+                    this.emit(':ask', res.data[1], reprompt)
                 }
             })
             .catch((error) => {
-                this.emit(':tell', "Pouvez-vous juste répéter quel arrêt ?")
+                this.emit(':tell', "Pouvez-vous juste répéter quel arrêt ? ", reprompt)
             });
     },
     'AllSchedulesIndent': function () {
@@ -180,10 +184,10 @@ const handlers = {
         /* Get the answer from the API */
         axios.get(url)
             .then((res) => {
-                this.emit(':ask', res.data)
+                this.emit(':ask', res.data + askAgain, reprompt)
             })
             .catch((error) => {
-                this.emit(':tell', "Le service est terminé ou cette combinaison n'existe pas. Besoin d'autre chose ?")
+                this.emit(':tell', "Le service est terminé ou cette combinaison n'existe pas. Besoin d'autre chose ? ", reprompt)
             });
     },
     'StoreFavoriteIndent': function () {
@@ -197,10 +201,10 @@ const handlers = {
 
         axios.put(url)
             .then((res) => {
-                this.emit(':ask', res.data)
+                this.emit(':ask', res.data  + askAgain, reprompt)
             })
             .catch((error) => {
-                this.emit(':tell', "J'ai besoin d'au moins un trajet valide pour ça. On commence par lequel ?")
+                this.emit(':tell', "J'ai besoin d'au moins un trajet valide pour ça. On commence par lequel ? ", reprompt)
             });
     },
     'GetFavoriteIndent': function () {
@@ -213,10 +217,10 @@ const handlers = {
 
         axios.get(url)
             .then((res) => {
-                this.emit(':ask', res.data)
+                this.emit(':ask', res.data  + askAgain, reprompt)
             })
             .catch((error) => {
-                this.emit(':tell', "Vous n'avez aucun trajet en favori. Commencez par me demander une horaire.")
+                this.emit(':tell', "Vous n'avez aucun trajet en favori. Commencez par me demander une horaire. ", reprompt)
             });
     },
     'AMAZON.HelpIntent': function () {
@@ -227,13 +231,17 @@ const handlers = {
 
         // We build the URL
         let url = "https://trametro.herokuapp.com/api/trip/delete_last_not_complete" + query
+        let speech = "Vous pouvez obtenir une horaire en donnant une ligne, une direction et un arrêt de tramway de Montpellier d'un seul coup ou en plusieurs étapes. Vous pouvez aussi garder un tramway en favori pour les prochaines sessions. Quelle ligne vous intéresse ?"
+
 
         axios.delete(url)
             .then((res) => {
-                this.emit(':ask', 'Vous pouvez obtenir une horaire en donnant une ligne, une direction et un arrêt de tramway de Montpellier. Vous pouvez aussi garder un tramway en favori pour les prochaines sessions. Quelle ligne vous intéresse ?')
+                //this.shouldEndSession(true)
+                this.emit(':ask', speech)
             })
             .catch((error) => {
-                this.emit(':ask', 'Vous pouvez obtenir une horaire en donnant une ligne, une direction et un arrêt de tramway de Montpellier. Vous pouvez aussi garder un tramway en favori pour les prochaines sessions. Quelle ligne vous intéresse ?')
+                //this.shouldEndSession(true)
+                this.emit(':ask', speech)
             });
     },
     'AMAZON.CancelIntent': function () {
@@ -244,13 +252,14 @@ const handlers = {
 
         // We build the URL
         let url = "https://trametro.herokuapp.com/api/trip/delete_last_not_complete" + query
+        let speech = "A bientôt, sur Trametro !"
 
         axios.delete(url)
             .then((res) => {
-                this.emit(':tell', 'A bientôt, sur Trametro !')
+                this.emit(':tell', speech)
             })
             .catch((error) => {
-                this.emit(':tell', 'A bientôt, sur Trametro !')
+                this.emit(':tell', speech)
             });
     },
     'AMAZON.StopIntent': function () {
@@ -261,15 +270,34 @@ const handlers = {
 
         // We build the URL
         let url = "https://trametro.herokuapp.com/api/trip/delete_last_not_complete" + query
+        let speech = "A bientôt, sur Trametro !"
 
         axios.delete(url)
             .then((res) => {
-                this.emit(':tell', 'A bientôt, sur Trametro !')
+                this.emit(':tell', speech)
             })
             .catch((error) => {
-                this.emit(':tell', 'A bientôt, sur Trametro !')
+                this.emit(':tell', speech)
             });
     },
+    'SessionEndedRequest': function () {
+        // We retrieve the current user & the session he is dealing with.
+        let travelerId = this.event.session.user.userId
+        let sessionId = this.event.session.sessionId
+        let query = "?travelerId=" + travelerId + '&sessionId=' + sessionId
+
+        // We build the URL
+        let url = "https://trametro.herokuapp.com/api/trip/delete_last_not_complete" + query
+        let speech = "A bientôt, sur Trametro !"
+
+        axios.delete(url)
+            .then((res) => {
+                this.emit(':tell', speech)
+            })
+            .catch((error) => {
+                this.emit(':tell', speech)
+            });
+    }
 };
 
 exports.handler = function (event, context, callback) {
